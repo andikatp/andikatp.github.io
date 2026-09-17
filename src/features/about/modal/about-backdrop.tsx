@@ -31,7 +31,7 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 cursor-pointer"
+        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-60 cursor-pointer"
         onClick={onClose}
         onMouseMove={handleMouseMove}
         onMouseEnter={(e) => {
@@ -58,7 +58,7 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
           mass: 0.2,
         }}
         style={{ backfaceVisibility: "hidden" }}
-        className="fixed top-0 left-0 w-[76px] h-[76px] bg-slate-950 text-white rounded-full flex items-center justify-center text-[10px] font-semibold tracking-widest shadow-2xl pointer-events-none z-50 select-none will-change-transform transform-gpu"
+        className="fixed top-0 left-0 w-19 h-19 bg-slate-950 text-white rounded-full flex items-center justify-center text-[10px] font-semibold tracking-widest shadow-2xl pointer-events-none z-75 select-none will-change-transform transform-gpu"
       >
         Close
       </motion.div>

@@ -1,12 +1,12 @@
 import { AnimatePresence } from "motion/react";
-import { lazy, Suspense, useState } from "react";
+import { Suspense, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "./components/layout/main-layout";
 import Preloader from "./components/ui/preloader";
 
-const HomePage = lazy(() => import("./pages/home-page"));
-const WorksPage = lazy(() => import("./pages/works-page"));
-const ContactPage = lazy(() => import("./pages/contact-page"));
+import HomePage from "./pages/home-page";
+import WorksPage from "./pages/works-page";
+import ContactPage from "./pages/contact-page";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

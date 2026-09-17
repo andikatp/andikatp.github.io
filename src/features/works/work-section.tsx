@@ -1,5 +1,6 @@
 import { LayoutGroup } from "framer-motion";
 import React, { useCallback, useState } from "react";
+import { useModal } from "../../context/modal-context";
 import {
   WorkCursor,
   WorkDetailModal,
@@ -10,6 +11,7 @@ import {
 } from "./";
 
 function WorkSection() {
+  const { setIsModalOpen: setGlobalModalOpen } = useModal();
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredWork, setHoveredWork] = useState<WorkItem | null>(null);
@@ -38,9 +40,10 @@ function WorkSection() {
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
+    setGlobalModalOpen(false);
     setSelectedWork(null);
     setSelectedLayoutId(null);
-  }, []);
+  }, [setGlobalModalOpen]);
 
   return (
     <LayoutGroup id="work-gallery">
@@ -58,6 +61,7 @@ function WorkSection() {
               setSelectedWork(work);
               setSelectedLayoutId(layoutId);
               setIsModalOpen(true);
+              setGlobalModalOpen(true);
             }}
           />
         </div>

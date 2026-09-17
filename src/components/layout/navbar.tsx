@@ -2,10 +2,20 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import meImg from "../../assets/me.webp";
+import { useModal } from "../../context/modal-context";
 import { Magnetic } from "../ui/magnetic";
 
 function Navbar() {
   const location = useLocation();
+  const { isModalOpen } = useModal();
+
+  const isAboutOpen = location.pathname === "/about";
+  const isWorkDetailRoute = location.pathname.startsWith("/works/");
+
+  if (isAboutOpen || isWorkDetailRoute || isModalOpen) {
+    return null;
+  }
+
   const isHome = location.pathname === "/" || location.pathname === "/about";
 
   const menus = isHome
@@ -25,7 +35,7 @@ function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-40 flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-4 sm:py-6 pointer-events-none"
+      className="fixed top-0 left-0 right-0 z-45 flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-4 sm:py-6 pointer-events-none"
     >
       {/* Left side: Logo or Back icon */}
       <div className="pointer-events-auto">
