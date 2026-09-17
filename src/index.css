@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@import "@fontsource-variable/inter/wght.css";
+
+:root {
+  font-family: "Inter Variable", sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter Variable", sans-serif;
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

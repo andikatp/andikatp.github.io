@@ -1,0 +1,96 @@
+import { motion, type Transition } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  HERO_TRANSITION,
+  INTERNAL_SWITCH_TRANSITION,
+} from "../animations/work-animations";
+import type { WorkItem } from "../data/work-data";
+
+interface WorkDetailViewerProps {
+  work: WorkItem;
+  activeLayoutId: string;
+  images: string[];
+  currentImageIndex: number;
+  isContentReady: boolean;
+  isClosing: boolean;
+  isInternalSwitch: boolean;
+  onLayoutAnimationComplete: () => void;
+  onPrevImage: () => void;
+  onNextImage: () => void;
+}
+
+export function WorkDetailViewer({
+  work,
+  activeLayoutId,
+  images,
+  currentImageIndex,
+  isContentReady,
+  isClosing,
+  isInternalSwitch,
+  onLayoutAnimationComplete,
+  onPrevImage,
+  onNextImage,
+}: WorkDetailViewerProps) {
+  const imageTransition: Transition = isClosing
+    ? HERO_TRANSITION
+    : isInternalSwitch
+      ? INTERNAL_SWITCH_TRANSITION
+      : HERO_TRANSITION;
+
+  const isReadyAndOpen = isContentReady && !isClosing;
+
+  return (
+    <div className="relative z-50 flex-1 w-full rounded-3xl flex items-center justify-center min-h-[420px] max-h-[60vh] p-4">
+      {/* Gray Container Background - Fades in after image finishes flying */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isReadyAndOpen ? 1 : 0 }}
+        exit={{ opacity: 0, transition: { duration: 0.1, delay: 0 } }}
+        transition={{ duration: isClosing ? 0.1 : 0.25 }}
+        className="absolute inset-0 bg-slate-100 rounded-3xl z-0 pointer-events-none"
+      />
+
+      <motion.img
+        key={`${work.id}-${currentImageIndex}`}
+        layoutId={activeLayoutId}
+        onLayoutAnimationComplete={onLayoutAnimationComplete}
+        transition={imageTransition}
+        initial={isInternalSwitch ? { opacity: 0, scale: 0.95 } : false}
+        animate={{ opacity: 1, scale: 1 }}
+        src={images[currentImageIndex]}
+        alt={`${work.title} photo ${currentImageIndex + 1}`}
+        className="h-full max-h-[56vh] w-auto object-contain rounded-2xl z-10 select-none relative"
+      />
+
+      {/* Left Arrow Button */}
+      {images.length > 1 && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isReadyAndOpen ? 1 : 0 }}
+          exit={{ opacity: 0, transition: { duration: 0.1, delay: 0 } }}
+          transition={{ duration: isClosing ? 0.1 : 0.2 }}
+          onClick={onPrevImage}
+          aria-label="Previous photo"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer backdrop-blur-md z-20"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </motion.button>
+      )}
+
+      {/* Right Arrow Button */}
+      {images.length > 1 && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isReadyAndOpen ? 1 : 0 }}
+          exit={{ opacity: 0, transition: { duration: 0.1, delay: 0 } }}
+          transition={{ duration: isClosing ? 0.1 : 0.2 }}
+          onClick={onNextImage}
+          aria-label="Next photo"
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition-colors cursor-pointer backdrop-blur-md z-20"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </motion.button>
+      )}
+    </div>
+  );
+}

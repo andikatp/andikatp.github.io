@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build & Output
+dist/
+dist-ssr/
+*.tsbuildinfo
+.vite/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Hosting & Deployment
+.vercel/
+.netlify/
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# IDE & OS Files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tmp
+*.bak
+
+# AI & Agent Artifacts
+.agents/
+skills-lock.json

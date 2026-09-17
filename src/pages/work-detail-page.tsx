@@ -1,0 +1,182 @@
+import { motion } from "framer-motion";
+import { ArrowLeft, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Magnetic from "../components/ui/magnetic";
+import {
+  BACK_BUTTON_VARIANTS,
+  getWorkBySlug,
+  getWorkLayoutId,
+  getWorkSlug,
+  WorkDetailGallery,
+  WorkDetailInfo,
+  WorkDetailSelector,
+  WorkDetailViewer,
+  type WorkItem,
+} from "../features/works";
+
+interface WorkDetailPageProps {
+  work?: WorkItem;
+  layoutId?: string;
+  onClose?: () => void;
+  onSelectWork?: (work: WorkItem, layoutId?: string) => void;
+}
+
+export default function WorkDetailPage({
+  work: propWork,
+  layoutId,
+  onClose,
+  onSelectWork,
+}: WorkDetailPageProps = {}) {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isContentReady, setIsContentReady] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [isInternalSwitch, setIsInternalSwitch] = useState(false);
+
+  const work = propWork || (slug ? getWorkBySlug(slug) : undefined);
+
+  const [prevWorkId, setPrevWorkId] = useState(work?.id);
+  if (work?.id !== prevWorkId) {
+    setPrevWorkId(work?.id);
+    setCurrentImageIndex(0);
+    setIsInternalSwitch(true);
+    setIsContentReady(true);
+    setIsClosing(false);
+  }
+
+  useEffect(() => {
+    if (!isInternalSwitch) return;
+    const timer = setTimeout(() => {
+      setIsInternalSwitch(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [isInternalSwitch]);
+
+  // Fallback safety timer in case layout animation complete callback doesn't fire
+  useEffect(() => {
+    if (isClosing || isInternalSwitch) return;
+    const timer = setTimeout(() => {
+      if (!isClosing) {
+        setIsContentReady(true);
+      }
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [work?.id, isClosing, isInternalSwitch]);
+
+  // Active layoutId points to the currently selected work item in the marquee
+  const activeLayoutId =
+    layoutId || (work ? getWorkLayoutId(work, 0) : undefined);
+
+  const images =
+    work?.images && work.images.length > 0
+      ? work.images
+      : work
+        ? [work.image]
+        : [];
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setIsContentReady(false);
+    if (onClose) {
+      onClose();
+    } else {
+      navigate("/works");
+    }
+  };
+
+  if (!work) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4 pt-24">
+        <h1 className="text-2xl font-bold text-slate-900">Project Not Found</h1>
+        <Magnetic>
+          <button
+            onClick={handleClose}
+            className="inline-flex items-center space-x-2 text-sm font-semibold text-slate-700 hover:text-slate-900 cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Works</span>
+          </button>
+        </Magnetic>
+      </div>
+    );
+  }
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <div className="w-full px-4 sm:px-8 md:px-16 py-4 sm:py-6 min-h-screen flex flex-col justify-between relative z-10">
+      {/* Back Button */}
+      <motion.button
+        variants={BACK_BUTTON_VARIANTS}
+        initial="initial"
+        animate="animate"
+        custom={isClosing}
+        exit="exit"
+        transition={{ duration: isClosing ? 0.1 : 0.2 }}
+        onClick={handleClose}
+        className="p-3 w-12 h-12 bg-black rounded-full hover:bg-gray-800 text-white transition-colors cursor-pointer select-none flex items-center justify-center shrink-0 mb-4 z-20"
+        aria-label="Back to Works"
+      >
+        <X className="w-5 h-5" />
+      </motion.button>
+
+      {/* Main Content Row */}
+      <div className="flex flex-col xl:flex-row items-center flex-1 gap-8 w-full max-w-[1700px] mx-auto my-auto">
+        <WorkDetailInfo
+          work={work}
+          isContentReady={isContentReady}
+          isClosing={isClosing}
+          isInternalSwitch={isInternalSwitch}
+        />
+
+        <WorkDetailViewer
+          work={work}
+          activeLayoutId={activeLayoutId || ""}
+          images={images}
+          currentImageIndex={currentImageIndex}
+          isContentReady={isContentReady}
+          isClosing={isClosing}
+          isInternalSwitch={isInternalSwitch}
+          onLayoutAnimationComplete={() => {
+            if (!isClosing) {
+              setIsContentReady(true);
+            }
+          }}
+          onPrevImage={handlePrevImage}
+          onNextImage={handleNextImage}
+        />
+
+        <WorkDetailGallery
+          images={images}
+          currentImageIndex={currentImageIndex}
+          isContentReady={isContentReady}
+          isClosing={isClosing}
+          onSelectImage={(idx) => setCurrentImageIndex(idx)}
+        />
+      </div>
+
+      {/* Quick Project Switcher */}
+      <WorkDetailSelector
+        currentWorkId={work.id}
+        activeLayoutId={activeLayoutId || ""}
+        isContentReady={isContentReady}
+        isClosing={isClosing}
+        onSelectWork={onSelectWork}
+        onSelectInternal={(item) => {
+          setCurrentImageIndex(0);
+          navigate(`/works/${getWorkSlug(item)}`);
+        }}
+      />
+    </div>
+  );
+}
+
+
