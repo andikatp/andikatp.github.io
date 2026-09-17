@@ -22,29 +22,29 @@ export default function Preloader({ onComplete }: PreloaderProps) {
   }, []);
 
   useEffect(() => {
-    // Phase 1: Show "Loading..." for 1000ms
+    // Phase 1: Show "Loading..." for 800ms
     const timer1 = setTimeout(() => {
       setPhase("waiting");
-    }, 1000);
+    }, 600);
     return () => clearTimeout(timer1);
   }, []);
 
   useEffect(() => {
     if (phase === "waiting") {
-      // Phase 2: Show "Thank you for waiting" for 1100ms
+      // Phase 2: Show "Thank you for waiting" for 1000ms
       const timer2 = setTimeout(() => {
         setPhase("exit");
-      }, 1100);
+      }, 1000);
       return () => clearTimeout(timer2);
     }
   }, [phase]);
 
   useEffect(() => {
     if (phase === "exit") {
-      // Phase 3: Allow U-curve SVG animation (800ms) to complete before unmounting
+      // Phase 3: Allow 2-keyframe curtain slide (1.15s) to complete before unmounting
       const timer3 = setTimeout(() => {
         if (onComplete) onComplete();
-      }, 850);
+      }, 1180);
       return () => clearTimeout(timer3);
     }
   }, [phase, onComplete]);
@@ -56,42 +56,41 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     dimension.height ||
     (typeof window !== "undefined" ? window.innerHeight : 900);
 
-  const initialPath = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h} 0 ${h} Z`;
-  const curvePath = `M0 0 L${w} 0 L${w} 0 Q${w / 2} ${Math.min(h * 0.35, 300)} 0 0 Z`;
-  const targetPath = `M0 0 L${w} 0 L${w} 0 Q${w / 2} 0 0 0 Z`;
+  // Deeper, more pronounced U-curve center depth
+  const curveHeight = Math.min(Math.max(Math.round(h * 0.45), 320), 500);
 
-  const curveVariants = {
-    initial: {
-      d: initialPath,
-    },
-    exit: {
-      d: [initialPath, curvePath, targetPath],
-      transition: {
-        duration: 0.8,
-        ease: [0.76, 0, 0.24, 1] as const,
-        times: [0, 0.5, 1],
-      },
-    },
-  };
+  const initialPath = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h} 0 ${h} Z`;
+  const targetPath = `M0 0 L${w} 0 L${w} ${h} Q${w / 2} ${h + curveHeight} 0 ${h} Z`;
+
+  const EASE = [0.76, 0, 0.24, 1] as const;
 
   return (
-    <div className="fixed inset-0 z-9999 pointer-events-none select-none">
+    <motion.div
+      initial={{ y: 0 }}
+      animate={
+        phase === "exit"
+          ? { y: `calc(-100% - ${curveHeight + 50}px)` }
+          : { y: 0 }
+      }
+      transition={{ duration: 1.15, ease: EASE }}
+      className="fixed inset-0 z-9999 pointer-events-none select-none"
+    >
       {/* SVG Background Path Curtain Overlay */}
-      <svg className="absolute inset-0 w-full h-full fill-black stroke-none pointer-events-auto">
+      <svg className="absolute top-0 left-0 w-full h-[calc(100%+550px)] fill-black stroke-none pointer-events-auto">
         <motion.path
-          variants={curveVariants}
-          initial="initial"
-          animate={phase === "exit" ? "exit" : "initial"}
+          initial={{ d: initialPath }}
+          animate={phase === "exit" ? { d: targetPath } : { d: initialPath }}
+          transition={{ duration: 1.15, ease: EASE }}
           style={{ willChange: "d" }}
         />
       </svg>
 
-      {/* Content Layer (Centered Text Only) */}
+      {/* Content Layer (Centered Sleek Text) */}
       <AnimatePresence>
         {phase !== "exit" && (
           <motion.div
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.25 } }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
             className="relative z-10 w-full h-full flex items-center justify-center text-white pointer-events-auto"
             style={{ willChange: "opacity" }}
           >
@@ -99,13 +98,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               {phase === "loading" && (
                 <motion.div
                   key="loading-text"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   className="text-center"
                 >
-                  <h1 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight text-white">
+                  <h1 className="text-lg sm:text-2xl md:text-3xl font-light tracking-wide text-white/90">
                     Loading<span className="animate-pulse">...</span>
                   </h1>
                 </motion.div>
@@ -114,13 +113,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
               {phase === "waiting" && (
                 <motion.div
                   key="thank-you-text"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   className="text-center"
                 >
-                  <h1 className="text-2xl sm:text-4xl md:text-5xl font-light tracking-tight text-slate-100">
+                  <h1 className="text-base sm:text-xl md:text-2xl font-light tracking-wide text-slate-200">
                     Thank you for waiting
                   </h1>
                 </motion.div>
@@ -129,6 +128,6 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
