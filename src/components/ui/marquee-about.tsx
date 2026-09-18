@@ -1,5 +1,5 @@
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 const items = [
   "Based in Bandung, Indonesia",
@@ -13,18 +13,29 @@ const trackItems = [...items, ...items, ...items, ...items];
 function MarqueeAbout() {
   const baseX = useMotionValue(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const singleWidthRef = useRef<number>(0);
 
   const speed = 0.8;
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        singleWidthRef.current = containerRef.current.scrollWidth / 4;
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   useAnimationFrame((_, delta) => {
     const moveBy = speed * (delta / 16);
     let currentX = baseX.get() - moveBy;
 
-    if (containerRef.current) {
-      const singleWidth = containerRef.current.scrollWidth / 4;
-      if (singleWidth > 0 && Math.abs(currentX) >= singleWidth) {
-        currentX = currentX + singleWidth;
-      }
+    const singleWidth = singleWidthRef.current;
+    if (singleWidth > 0 && Math.abs(currentX) >= singleWidth) {
+      currentX = currentX + singleWidth;
     }
 
     baseX.set(currentX);
@@ -35,7 +46,7 @@ function MarqueeAbout() {
       <motion.div
         ref={containerRef}
         style={{ x: baseX }}
-        className="flex w-max shrink-0 items-center space-x-6 pr-6"
+        className="flex w-max shrink-0 items-center space-x-6 pr-6 transform-gpu will-change-transform"
       >
         {trackItems.map((item, index) => (
           <React.Fragment key={`about-item-${index}`}>
@@ -49,3 +60,4 @@ function MarqueeAbout() {
 }
 
 export default MarqueeAbout;
+

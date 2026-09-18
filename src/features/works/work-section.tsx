@@ -1,4 +1,4 @@
-import { LayoutGroup } from "framer-motion";
+import { LayoutGroup, useMotionValue, useSpring } from "framer-motion";
 import React, { useCallback, useState } from "react";
 import { useModal } from "../../context/modal-context";
 import {
@@ -12,7 +12,11 @@ import {
 
 function WorkSection() {
   const { setIsModalOpen: setGlobalModalOpen } = useModal();
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const rawX = useMotionValue(-100);
+  const rawY = useMotionValue(-100);
+  const cursorX = useSpring(rawX, { damping: 24, stiffness: 280, mass: 0.4 });
+  const cursorY = useSpring(rawY, { damping: 24, stiffness: 280, mass: 0.4 });
+
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredWork, setHoveredWork] = useState<WorkItem | null>(null);
   const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
@@ -20,14 +24,15 @@ function WorkSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    setCursorPos({ x: e.clientX, y: e.clientY });
-    setIsHovered(true);
-  }, []);
+    rawX.set(e.clientX - 64);
+    rawY.set(e.clientY - 24);
+  }, [rawX, rawY]);
 
   const handleMouseEnter = useCallback((e: React.MouseEvent) => {
-    setCursorPos({ x: e.clientX, y: e.clientY });
+    rawX.set(e.clientX - 64);
+    rawY.set(e.clientY - 24);
     setIsHovered(true);
-  }, []);
+  }, [rawX, rawY]);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
@@ -68,7 +73,8 @@ function WorkSection() {
         <WorkInfoPanel hoveredWork={hoveredWork} />
         <WorkCursor
           isHovered={isHovered && Boolean(hoveredWork)}
-          cursorPos={cursorPos}
+          x={cursorX}
+          y={cursorY}
         />
 
         <WorkDetailModal
@@ -89,3 +95,4 @@ function WorkSection() {
 }
 
 export default WorkSection;
+

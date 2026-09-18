@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import React, { useRef, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import React, { useRef } from "react";
 
 interface MagneticProps {
   children: React.ReactNode;
@@ -13,34 +13,32 @@ export function Magnetic({
   className = "",
 }: MagneticProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const x = useSpring(rawX, { stiffness: 220, damping: 18, mass: 0.1 });
+  const y = useSpring(rawY, { stiffness: 220, damping: 18, mass: 0.1 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current.getBoundingClientRect();
-    const middleX = clientX - (left + width / 2);
-    const middleY = clientY - (top + height / 2);
-    setPosition({
-      x: Math.round(middleX * strength),
-      y: Math.round(middleY * strength),
-    });
+    const rect = ref.current.getBoundingClientRect();
+    const middleX = clientX - (rect.left + rect.width / 2);
+    const middleY = clientY - (rect.top + rect.height / 2);
+    rawX.set(Math.round(middleX * strength));
+    rawY.set(Math.round(middleY * strength));
   };
 
   const handleMouseLeave = () => {
-    setPosition({ x: 0, y: 0 });
+    rawX.set(0);
+    rawY.set(0);
   };
-
-  const { x, y } = position;
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 220, damping: 18, mass: 0.1 }}
-      style={{ backfaceVisibility: "hidden" }}
+      style={{ x, y, backfaceVisibility: "hidden" }}
       className={`will-change-transform transform-gpu ${className}`}
     >
       {children}
@@ -49,3 +47,4 @@ export function Magnetic({
 }
 
 export default Magnetic;
+

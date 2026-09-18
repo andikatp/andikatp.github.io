@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useState } from "react";
 import { backdropVariants } from "./about-variants";
 
@@ -7,21 +7,26 @@ interface AboutBackdropProps {
 }
 
 export function AboutBackdrop({ onClose }: AboutBackdropProps) {
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const rawX = useMotionValue(-100);
+  const rawY = useMotionValue(-100);
+  const x = useSpring(rawX, { damping: 28, stiffness: 350, mass: 0.2 });
+  const y = useSpring(rawY, { damping: 28, stiffness: 350, mass: 0.2 });
+  const [showCloseCircle, setShowCloseCircle] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    setCursorPos({ x: Math.round(e.clientX), y: Math.round(e.clientY) });
-    if (!isHovered) setIsHovered(true);
+    rawX.set(e.clientX - 38);
+    rawY.set(e.clientY - 38);
+
+    const isLeft =
+      typeof window !== "undefined" &&
+      window.innerWidth >= 768 &&
+      e.clientX > 0 &&
+      e.clientX < window.innerWidth / 2;
+
+    if (isLeft !== showCloseCircle) {
+      setShowCloseCircle(isLeft);
+    }
   };
-
-  const isLeftBackdrop =
-    typeof window !== "undefined" &&
-    window.innerWidth >= 768 &&
-    cursorPos.x > 0 &&
-    cursorPos.x < window.innerWidth / 2;
-
-  const showCloseCircle = isHovered && isLeftBackdrop;
 
   return (
     <>
@@ -31,14 +36,20 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
         initial="initial"
         animate="enter"
         exit="exit"
-        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-60 cursor-pointer"
+        className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-60 cursor-pointer transform-gpu"
         onClick={onClose}
         onMouseMove={handleMouseMove}
         onMouseEnter={(e) => {
-          setCursorPos({ x: Math.round(e.clientX), y: Math.round(e.clientY) });
-          setIsHovered(true);
+          rawX.set(e.clientX - 38);
+          rawY.set(e.clientY - 38);
+          const isLeft =
+            typeof window !== "undefined" &&
+            window.innerWidth >= 768 &&
+            e.clientX > 0 &&
+            e.clientX < window.innerWidth / 2;
+          setShowCloseCircle(isLeft);
         }}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={() => setShowCloseCircle(false)}
       />
 
       {/* Floating Pointer "Close" Circle */}
@@ -47,17 +58,13 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
         animate={{
           scale: showCloseCircle ? 1 : 0,
           opacity: showCloseCircle ? 1 : 0,
-          x: cursorPos.x - 38,
-          y: cursorPos.y - 38,
         }}
         exit={{ scale: 0, opacity: 0 }}
         transition={{
-          type: "spring",
-          damping: 28,
-          stiffness: 350,
-          mass: 0.2,
+          scale: { type: "spring", damping: 28, stiffness: 350, mass: 0.2 },
+          opacity: { duration: 0.15 },
         }}
-        style={{ backfaceVisibility: "hidden" }}
+        style={{ x, y, backfaceVisibility: "hidden" }}
         className="fixed top-0 left-0 w-19 h-19 bg-slate-950 text-white rounded-full flex items-center justify-center text-[10px] font-semibold tracking-widest shadow-2xl pointer-events-none z-75 select-none will-change-transform transform-gpu"
       >
         Close
@@ -65,3 +72,4 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
     </>
   );
 }
+

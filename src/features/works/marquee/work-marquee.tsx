@@ -1,5 +1,5 @@
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   HERO_TRANSITION,
@@ -33,9 +33,22 @@ export function WorkMarquee({
   const navigate = useNavigate();
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const singleWidthRef = useRef<number>(0);
   const x = useMotionValue(0);
 
   const speed = 0.5;
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        singleWidthRef.current = containerRef.current.scrollWidth / 4;
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   useAnimationFrame((_, delta) => {
     if (isPaused || isPausedProp) return;
@@ -43,11 +56,9 @@ export function WorkMarquee({
     const moveBy = speed * (delta / 16);
     let currentX = x.get() - moveBy;
 
-    if (containerRef.current) {
-      const singleWidth = containerRef.current.scrollWidth / 4;
-      if (singleWidth > 0 && Math.abs(currentX) >= singleWidth) {
-        currentX = currentX + singleWidth;
-      }
+    const singleWidth = singleWidthRef.current;
+    if (singleWidth > 0 && Math.abs(currentX) >= singleWidth) {
+      currentX = currentX + singleWidth;
     }
 
     x.set(currentX);
@@ -66,7 +77,7 @@ export function WorkMarquee({
       <motion.div
         ref={containerRef}
         style={{ x }}
-        className="flex w-max shrink-0 items-center space-x-6 py-2"
+        className="flex w-max shrink-0 items-center space-x-6 py-2 transform-gpu will-change-transform"
       >
         {DUPLICATED_WORKS.map((work, index) => {
           const slug = getWorkSlug(work);
@@ -99,7 +110,7 @@ export function WorkMarquee({
               style={{ zIndex: isSelected ? 9999 : 1 }}
             >
               <motion.img
-                layoutId={itemLayoutId}
+                layoutId={isSelected ? itemLayoutId : undefined}
                 transition={{
                   layout: HERO_TRANSITION,
                   scale: { duration: 0.2, ease: "easeOut" },
@@ -109,7 +120,7 @@ export function WorkMarquee({
                 variants={MARQUEE_CARD_VARIANTS}
                 src={work.image}
                 alt={work.title}
-                className="h-[48vh] min-h-[300px] max-h-[440px] sm:h-72 md:h-[340px] lg:h-[400px] w-auto object-contain rounded-xl pointer-events-none"
+                className="h-[48vh] min-h-[300px] max-h-[440px] sm:h-72 md:h-[340px] lg:h-[400px] w-auto object-contain rounded-xl pointer-events-none transform-gpu"
               />
             </motion.div>
           );
@@ -118,3 +129,4 @@ export function WorkMarquee({
     </div>
   );
 }
+

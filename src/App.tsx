@@ -1,4 +1,4 @@
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "./components/layout/main-layout";
