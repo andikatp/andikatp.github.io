@@ -1,8 +1,15 @@
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HERO_TRANSITION, MARQUEE_CARD_VARIANTS } from "../animations/work-animations";
-import { DUPLICATED_WORKS, getWorkSlug, type WorkItem } from "../data/work-data";
+import {
+  HERO_TRANSITION,
+  MARQUEE_CARD_VARIANTS,
+} from "../animations/work-animations";
+import {
+  DUPLICATED_WORKS,
+  getWorkSlug,
+  type WorkItem,
+} from "../data/work-data";
 
 interface WorkMarqueeProps {
   onHoverWork: (work: WorkItem | null) => void;

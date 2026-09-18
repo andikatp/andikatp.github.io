@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   AboutAdditionals,
   AboutBackdrop,
@@ -51,7 +52,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
     { id: "cv", label: "Download CV" },
   ] as const;
 
-  return (
+  return createPortal(
     <AnimatePresence mode="wait">
       {isOpen && (
         <>
@@ -64,7 +65,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             initial="initial"
             animate="enter"
             exit="exit"
-            className="fixed top-0 right-0 h-full w-full md:w-1/2 bg-white text-slate-900 shadow-2xl z-70 flex flex-col"
+            className="fixed top-0 right-0 flex flex-col w-full h-full bg-white shadow-2xl md:w-1/2 text-slate-900 z-70"
           >
             {/* SVG Elastic Curve Edge on Left Border */}
             <AboutCurve windowHeight={windowHeight} />
@@ -73,7 +74,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             <AboutHeader onClose={onClose} customIndex={0} />
 
             {/* Tab Navigation */}
-            <div className="px-8 pt-4 pb-2 border-b border-slate-100 flex items-center space-x-2 shrink-0">
+            <div className="flex items-center px-8 pt-4 pb-2 space-x-2 border-b border-slate-100 shrink-0">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id;
                 return (
@@ -93,7 +94,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             </div>
 
             {/* Scrollable Content Body */}
-            <div className="flex-1 p-8 overflow-y-auto overflow-x-hidden no-scrollbar space-y-8">
+            <div className="flex-1 p-8 space-y-8 overflow-x-hidden overflow-y-auto no-scrollbar">
               <AnimatePresence mode="wait">
                 {activeTab === "about" && (
                   <motion.div
@@ -154,14 +155,15 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
               initial="initial"
               animate="enter"
               exit="exit"
-              className="px-8 py-4 border-t border-slate-100 bg-white shrink-0 z-10"
+              className="z-10 px-8 py-4 bg-white border-t border-slate-100 shrink-0"
             >
               <AboutAdditionals />
             </motion.div>
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 

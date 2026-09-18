@@ -2,19 +2,10 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import meImg from "../../assets/me.webp";
-import { useModal } from "../../context/modal-context";
 import { Magnetic } from "../ui/magnetic";
 
 function Navbar() {
   const location = useLocation();
-  const { isModalOpen } = useModal();
-
-  const isAboutOpen = location.pathname === "/about";
-  const isWorkDetailRoute = location.pathname.startsWith("/works/");
-
-  if (isAboutOpen || isWorkDetailRoute || isModalOpen) {
-    return null;
-  }
 
   const isHome = location.pathname === "/" || location.pathname === "/about";
 
@@ -35,7 +26,7 @@ function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-45 flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-4 sm:py-6 pointer-events-none"
+      className="top-0 left-0 right-0 flex flex-row items-center justify-between px-4 py-4 "
     >
       {/* Left side: Logo or Back icon */}
       <div className="pointer-events-auto">
@@ -43,16 +34,16 @@ function Navbar() {
           <Magnetic strength={0.9}>
             <Link
               to="/"
-              className="flex flex-row items-center space-x-3 sm:space-x-4 cursor-pointer"
+              className="flex flex-row items-center space-x-3 cursor-pointer sm:space-x-4"
             >
               <img
                 src={meImg}
                 alt="Andika's Profile"
                 height={24}
                 width={24}
-                className="rounded-full object-cover shrink-0"
+                className="object-cover rounded-full shrink-0"
               />
-              <h4 className="font-medium text-slate-900 select-none text-sm sm:text-base">
+              <h4 className="text-sm font-medium select-none text-slate-900 sm:text-base">
                 andikatp.
               </h4>
             </Link>
@@ -62,7 +53,7 @@ function Navbar() {
             <Link
               to="/"
               aria-label="Back to home"
-              className="w-11 h-11 bg-black text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer select-none"
+              className="flex items-center justify-center text-white transition-all bg-black rounded-full shadow-md cursor-pointer select-none w-11 h-11 hover:scale-105 active:scale-95"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
             </Link>
@@ -71,7 +62,7 @@ function Navbar() {
       </div>
 
       {/* Navigation Links */}
-      <nav className="pointer-events-auto flex flex-row items-center space-x-1 sm:space-x-2 md:space-x-4">
+      <nav className="flex flex-row items-center space-x-1 pointer-events-auto sm:space-x-2 md:space-x-4">
         {menus.map((menu) => {
           const isActive = location.pathname === menu.path;
           return (

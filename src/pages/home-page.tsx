@@ -14,7 +14,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col flex-1 justify-between overflow-hidden relative">
+    <div className="flex flex-col flex-1 overflow-hidden">
       <HeroSection />
       <MarqueeAbout />
       <AboutSection isOpen={isAboutOpen} onClose={handleCloseAbout} />

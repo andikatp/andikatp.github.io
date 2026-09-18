@@ -47,9 +47,9 @@ function WorkSection() {
 
   return (
     <LayoutGroup id="work-gallery">
-      <section className="flex flex-col justify-end w-full min-h-[calc(100vh-60px)] py-4 pt-16 sm:pt-20 gap-2 relative">
+      <section className="flex flex-col justify-end w-full flex-1 gap-2">
         <WorkHeader />
-        <div className="mt-auto mb-1">
+        <div className="mt-auto">
           <WorkMarquee
             onHoverWork={handleHoverWork}
             onMouseMove={handleMouseMove}
