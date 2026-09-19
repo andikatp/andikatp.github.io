@@ -7,9 +7,12 @@ import { Magnetic } from "../ui/magnetic";
 
 function Navbar() {
   const location = useLocation();
-  const { navigateWithTransition, isAnimating } = usePageTransition();
+  const { navigateWithTransition, isAnimating, targetPath } =
+    usePageTransition();
 
-  const isHome = location.pathname === "/" || location.pathname === "/about";
+  const currentPath =
+    isAnimating && targetPath ? targetPath : location.pathname;
+  const isHome = currentPath === "/" || currentPath === "/about";
 
   const menus = [
     { label: "About", path: "/about" },
@@ -27,7 +30,7 @@ function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="relative z-50 top-0 left-0 right-0 flex flex-row items-center justify-between px-16 py-6"
+      className="relative z-50 top-0 left-0 right-0 flex flex-row items-center justify-between px-4 sm:px-8 md:px-16 py-4 sm:py-6"
     >
       {/* Left side: Logo or Back icon */}
       <div className="pointer-events-auto">
@@ -36,7 +39,7 @@ function Navbar() {
             <a
               href="/"
               onClick={(e) => handleNavClick(e, "/")}
-              className={`flex flex-row items-center space-x-3 sm:space-x-4 ${
+              className={`flex flex-row items-center space-x-2.5 sm:space-x-4 ${
                 isAnimating
                   ? "cursor-default pointer-events-none"
                   : "cursor-pointer"
@@ -47,7 +50,7 @@ function Navbar() {
                 alt="Andika's Profile"
                 height={24}
                 width={24}
-                className="object-cover rounded-full shrink-0"
+                className="object-cover rounded-full shrink-0 w-6 h-6 sm:w-7 sm:h-7"
               />
               <h4 className="text-sm font-medium select-none text-slate-900 sm:text-base">
                 andikatp.
@@ -60,13 +63,13 @@ function Navbar() {
               href="/"
               onClick={(e) => handleNavClick(e, "/")}
               aria-label="Back to home"
-              className={`flex items-center justify-center text-white transition-all bg-black rounded-full shadow-md select-none w-12 h-12 ${
+              className={`flex items-center justify-center text-white transition-all bg-black rounded-full shadow-md select-none w-10 h-10 sm:w-12 sm:h-12 ${
                 isAnimating
                   ? "cursor-default pointer-events-none"
                   : "cursor-pointer hover:scale-105 active:scale-95"
               }`}
             >
-              <ArrowLeft className="w-5 h-5 text-white" />
+              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </a>
           </Magnetic>
         )}
@@ -75,7 +78,9 @@ function Navbar() {
       {/* Navigation Links */}
       <nav className="flex flex-row items-center space-x-1 pointer-events-auto sm:space-x-2 md:space-x-4">
         {menus.map((menu) => {
-          const isActive = location.pathname === menu.path;
+          const isActive =
+            currentPath === menu.path ||
+            (menu.path === "/works" && currentPath.startsWith("/works"));
           return (
             <Magnetic key={menu.label} strength={0.35}>
               <a

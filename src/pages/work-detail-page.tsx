@@ -121,14 +121,14 @@ export default function WorkDetailPage({
         exit="exit"
         transition={{ duration: isClosing ? 0.1 : 0.2 }}
         onClick={handleClose}
-        className="p-3 w-12 h-12 bg-black rounded-full hover:bg-gray-800 text-white transition-colors cursor-pointer select-none flex items-center justify-center shrink-0 mb-4 z-20"
+        className="p-2.5 sm:p-3 w-10 h-10 sm:w-12 sm:h-12 bg-black rounded-full hover:bg-gray-800 text-white transition-colors cursor-pointer select-none flex items-center justify-center shrink-0 mb-3 sm:mb-4 z-20"
         aria-label="Back to Works"
       >
-        <X className="w-5 h-5" />
+        <X className="w-4 h-4 sm:w-5 sm:h-5" />
       </motion.button>
 
       {/* Main Content Row */}
-      <div className="flex flex-col xl:flex-row items-center flex-1 gap-8 w-full max-w-[1700px] mx-auto my-auto">
+      <div className="flex flex-col xl:flex-row items-stretch xl:items-center flex-1 gap-6 xl:gap-8 w-full max-w-[1700px] mx-auto my-auto py-2 sm:py-4">
         <WorkDetailInfo
           work={work}
           isContentReady={isContentReady}

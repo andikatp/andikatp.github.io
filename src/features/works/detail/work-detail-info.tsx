@@ -32,24 +32,26 @@ export function WorkDetailInfo({
         duration: isClosing ? 0.1 : 0.3,
         delay: isReadyAndOpen ? (isInternalSwitch ? 0 : 0.05) : 0,
       }}
-      className="space-y-6 w-full xl:w-1/3 xl:pr-6 shrink-0"
+      className="space-y-4 sm:space-y-6 w-full xl:w-1/3 xl:pr-6 shrink-0"
     >
-      <p className="text-sm font-medium text-slate-400 tracking-wider">
-        {workNumber}
-      </p>
-      <h1 className="text-4xl sm:text-6xl xl:text-7xl font-semibold text-slate-900 tracking-tight">
-        {work.title}
-      </h1>
-      <p className="text-slate-600 leading-relaxed text-base sm:text-lg">
+      <div>
+        <p className="text-xs sm:text-sm font-medium text-slate-400 tracking-wider">
+          {workNumber}
+        </p>
+        <h1 className="text-2xl sm:text-4xl md:text-5xl xl:text-6xl font-semibold text-slate-900 tracking-tight leading-tight">
+          {work.title}
+        </h1>
+      </div>
+      <p className="text-slate-600 leading-relaxed text-sm sm:text-base md:text-lg">
         {work.description}
       </p>
 
-      <div className="flex flex-row justify-between w-full gap-4 pt-2">
+      <div className="flex flex-row justify-between w-full gap-4 pt-1 sm:pt-2">
         <div className="border-t border-slate-200 space-y-1 pt-3 w-full">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             TECHSTACKS
           </p>
-          <p className="text-sm font-medium text-slate-900 uppercase">
+          <p className="text-xs sm:text-sm font-medium text-slate-900 uppercase">
             {work.techstacks.join(" • ")}
           </p>
         </div>
@@ -57,19 +59,31 @@ export function WorkDetailInfo({
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
             ROLE
           </p>
-          <p className="text-sm font-medium text-slate-900 uppercase">
+          <p className="text-xs sm:text-sm font-medium text-slate-900 uppercase">
             {work.role}
           </p>
         </div>
       </div>
 
-      <div className="flex flex-row gap-3 pt-6">
-        <button className="bg-white px-5 py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-sm font-medium text-slate-800">
-          <img src={playstore} alt="Play Store" height={20} width={20} />
+      <div className="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 pt-3 sm:pt-6">
+        <button className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none">
+          <img
+            src={playstore}
+            alt="Play Store"
+            height={20}
+            width={20}
+            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+          />
           <span>Play Store</span>
         </button>
-        <button className="bg-white px-5 py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-sm font-medium text-slate-800">
-          <img src={appstore} alt="App Store" height={20} width={20} />
+        <button className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none">
+          <img
+            src={appstore}
+            alt="App Store"
+            height={20}
+            width={20}
+            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+          />
           <span>App Store</span>
         </button>
       </div>

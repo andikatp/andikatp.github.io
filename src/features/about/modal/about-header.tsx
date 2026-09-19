@@ -16,7 +16,7 @@ export function AboutHeader({ onClose, customIndex = 0 }: AboutHeaderProps) {
       initial="initial"
       animate="enter"
       exit="exit"
-      className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-white sticky top-0 z-10"
+      className="flex items-center justify-between px-4 sm:px-6 md:px-8 py-4 sm:py-6 border-b border-slate-100 bg-white sticky top-0 z-10"
     >
       <div className="flex items-center space-x-4">
         <img

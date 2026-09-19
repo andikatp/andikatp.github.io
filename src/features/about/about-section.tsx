@@ -65,7 +65,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             initial="initial"
             animate="enter"
             exit="exit"
-            className="fixed top-0 right-0 flex flex-col w-full h-full bg-white shadow-2xl md:w-1/2 text-slate-900 z-70"
+            className="fixed top-0 right-0 flex flex-col w-full h-full bg-white shadow-2xl sm:w-[85%] md:w-[65%] lg:w-1/2 xl:w-2/5 text-slate-900 z-70"
           >
             {/* SVG Elastic Curve Edge on Left Border */}
             <AboutCurve windowHeight={windowHeight} />
@@ -74,14 +74,14 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             <AboutHeader onClose={onClose} customIndex={0} />
 
             {/* Tab Navigation */}
-            <div className="flex items-center px-8 pt-4 pb-2 space-x-2 border-b border-slate-100 shrink-0">
+            <div className="flex items-center px-4 sm:px-6 md:px-8 pt-3 sm:pt-4 pb-2 space-x-2 border-b border-slate-100 shrink-0 overflow-x-auto no-scrollbar">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as TabType)}
-                    className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 select-none cursor-pointer ${
+                    className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 select-none cursor-pointer shrink-0 ${
                       isActive
                         ? "bg-slate-900 text-white shadow-sm"
                         : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
@@ -94,7 +94,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             </div>
 
             {/* Scrollable Content Body */}
-            <div className="flex-1 p-8 space-y-8 overflow-x-hidden overflow-y-auto no-scrollbar">
+            <div className="flex-1 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 overflow-x-hidden overflow-y-auto no-scrollbar">
               <AnimatePresence mode="wait">
                 {activeTab === "about" && (
                   <motion.div
@@ -103,7 +103,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
                     initial="initial"
                     animate="enter"
                     exit="exit"
-                    className="space-y-8"
+                    className="space-y-6 sm:space-y-8"
                   >
                     <AboutIntro customIndex={1} />
                     <AboutStory customIndex={2} />
@@ -155,7 +155,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
               initial="initial"
               animate="enter"
               exit="exit"
-              className="z-10 px-8 py-4 bg-white border-t border-slate-100 shrink-0"
+              className="z-10 px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-white border-t border-slate-100 shrink-0"
             >
               <AboutAdditionals />
             </motion.div>

@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PageTransitionContext } from "./page-transition-context";
 
@@ -14,6 +14,17 @@ export function PageTransitionProvider({
   const [phase, setPhase] = useState<"idle" | "backdrop" | "rising">("idle");
   const [targetPath, setTargetPath] = useState<string | null>(null);
 
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearAllTimeouts = () => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  };
+
+  useEffect(() => {
+    return () => clearAllTimeouts();
+  }, []);
+
   const navigateWithTransition = (path: string) => {
     if (phase !== "idle") return;
     if (location.pathname === path) return;
@@ -28,29 +39,37 @@ export function PageTransitionProvider({
       return;
     }
 
+    clearAllTimeouts();
     setTargetPath(path);
     // 1. Show dark modal backdrop over CURRENT page first
     setPhase("backdrop");
 
     // 2. After 380ms backdrop hold, start the white semicircle arch slide UP
-    setTimeout(() => {
+    const t1 = setTimeout(() => {
       setPhase("rising");
 
       // 3. At 480ms into rising slide (~860ms total), when covered by white curtain, swap route!
-      setTimeout(() => {
+      const t2 = setTimeout(() => {
         navigate(path);
         window.scrollTo(0, 0);
       }, 480);
+      timeoutsRef.current.push(t2);
 
-      // 4. Complete transition cleanly when arch finishes rising (total ~1250ms)
-      setTimeout(() => {
+      // 4. Complete rising slide at 850ms into rising (~1230ms total).
+      // Trigger exit phase by setting phase to "idle", but hold targetPath until AnimatePresence exit completes (~850ms exit)
+      const t3 = setTimeout(() => {
         setPhase("idle");
-        setTargetPath(null);
-      }, 870);
+        const t4 = setTimeout(() => {
+          setTargetPath(null);
+        }, 850);
+        timeoutsRef.current.push(t4);
+      }, 850);
+      timeoutsRef.current.push(t3);
     }, 380);
+    timeoutsRef.current.push(t1);
   };
 
-  const isAnimating = phase !== "idle";
+  const isAnimating = phase !== "idle" || targetPath !== null;
 
   return (
     <PageTransitionContext.Provider

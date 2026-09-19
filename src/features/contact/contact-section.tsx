@@ -48,12 +48,12 @@ const itemVariants: Variants = {
 
 function ContactSection() {
   return (
-    <section className="flex flex-col items-center justify-center flex-1 px-6 sm:px-10 md:px-16 w-full py-12 pt-20 sm:pt-24 gap-8">
+    <section className="flex flex-col items-center justify-center flex-1 px-4 sm:px-8 md:px-16 w-full py-10 sm:py-12 pt-14 sm:pt-20 md:pt-24 gap-6 sm:gap-8">
       <motion.p
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="uppercase text-sm text-gray-400 tracking-tight"
+        className="uppercase text-xs sm:text-sm text-gray-400 tracking-wider font-semibold"
       >
         Contact
       </motion.p>
@@ -61,7 +61,7 @@ function ContactSection() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.15 }}
-        className="text-4xl sm:text-6xl font-semibold text-slate-900 tracking-tight"
+        className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-slate-900 tracking-tight text-center"
       >
         Let's Work Together.
       </motion.h1>
@@ -70,7 +70,7 @@ function ContactSection() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="mt-8 py-4 items-center border-t border-slate-200 w-full sm:w-1/2 flex flex-col gap-y-4"
+        className="mt-4 sm:mt-8 py-4 items-center border-t border-slate-200 w-full sm:w-3/4 md:w-1/2 flex flex-col gap-y-4 sm:gap-y-6"
       >
         {links.map((item) => (
           <motion.div key={item.id} variants={itemVariants}>
@@ -79,10 +79,10 @@ function ContactSection() {
                 href={item.link}
                 target="_blank"
                 rel="noreferrer"
-                className="flex flex-row items-center gap-2 text-2xl font-semibold hover:text-slate-600 transition-colors select-none"
+                className="flex flex-row items-center gap-2 text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900 hover:text-slate-600 transition-colors select-none"
               >
                 <span>{item.label}</span>
-                <ArrowUpRight size={20} />
+                <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
               </a>
             </Magnetic>
           </motion.div>

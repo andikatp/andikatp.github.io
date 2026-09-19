@@ -31,7 +31,7 @@ export function WorkDetailGallery({
         duration: isClosing ? 0.1 : 0.3,
         delay: isReadyAndOpen ? 0.1 : 0,
       }}
-      className="flex flex-col gap-2 justify-center max-h-[60vh] overflow-y-auto no-scrollbar py-2 shrink-0"
+      className="flex flex-row xl:flex-col gap-2 justify-center items-center max-w-full overflow-x-auto xl:overflow-y-auto xl:max-h-[60vh] no-scrollbar py-1 xl:py-2 shrink-0"
     >
       {images.map((img, idx) => {
         const isSelected = idx === currentImageIndex;
@@ -39,10 +39,10 @@ export function WorkDetailGallery({
           <button
             key={idx}
             onClick={() => onSelectImage(idx)}
-            className={`relative w-12 h-16 sm:w-14 sm:h-20 overflow-hidden transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 ${
+            className={`relative w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 ${
               isSelected
-                ? "opacity-100 grayscale-0 scale-105"
-                : "opacity-30 grayscale hover:opacity-100 hover:grayscale-0"
+                ? "opacity-100 grayscale-0 scale-105 ring-2 ring-slate-900"
+                : "opacity-40 grayscale hover:opacity-100 hover:grayscale-0"
             }`}
           >
             <img

@@ -77,7 +77,7 @@ export function WorkMarquee({
       <motion.div
         ref={containerRef}
         style={{ x }}
-        className="flex w-max shrink-0 items-center space-x-6 py-6"
+        className="flex w-max shrink-0 items-center space-x-3 sm:space-x-6 py-4 sm:py-6"
       >
         {DUPLICATED_WORKS.map((work, index) => {
           const slug = getWorkSlug(work);
@@ -115,7 +115,7 @@ export function WorkMarquee({
                 variants={MARQUEE_CARD_VARIANTS}
                 src={work.image}
                 alt={work.title}
-                className="h-[48vh] min-h-[300px] max-h-[440px] sm:h-72 md:h-[340px] lg:h-[400px] w-auto object-contain rounded-2xl pointer-events-none"
+                className="h-[36vh] min-h-[220px] max-h-[320px] sm:h-[40vh] sm:min-h-[280px] md:h-[340px] lg:h-[400px] w-auto object-contain rounded-2xl pointer-events-none"
               />
             </motion.div>
           );

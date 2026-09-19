@@ -21,7 +21,7 @@ export function WorkCursor({ isHovered, x, y }: WorkCursorProps) {
         opacity: { duration: 0.15 },
       }}
       style={{ x, y, backfaceVisibility: "hidden" }}
-      className="fixed top-0 left-0 bg-slate-950 text-white rounded-full flex flex-row items-center justify-center space-x-2 shadow-2xl pointer-events-none z-50 select-none px-4 py-2.5 transform-gpu will-change-transform"
+      className="fixed top-0 left-0 bg-slate-950 text-white rounded-full hidden md:flex flex-row items-center justify-center space-x-2 shadow-2xl pointer-events-none z-50 select-none px-4 py-2.5 transform-gpu will-change-transform"
     >
       <span className="text-xs font-semibold whitespace-nowrap">
         View Project

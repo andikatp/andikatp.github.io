@@ -38,9 +38,9 @@ export function WorkDetailSelector({
         duration: isClosing ? 0.1 : 0.3,
         delay: isReadyAndOpen ? 0.15 : 0,
       }}
-      className="flex justify-end w-full pt-4"
+      className="flex justify-start sm:justify-end w-full pt-2 sm:pt-4 overflow-x-auto no-scrollbar py-1"
     >
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-center gap-1.5 sm:gap-2 min-w-max">
         {projectsList.map((item) => {
           const isActive = item.id === currentWorkId;
           return (
@@ -66,7 +66,7 @@ export function WorkDetailSelector({
               <img
                 src={item.image}
                 alt={item.title}
-                className="h-9 sm:h-11 w-auto max-w-[28px] sm:max-w-[34px] object-contain rounded-md"
+                className="h-8 sm:h-11 w-auto max-w-[26px] sm:max-w-[34px] object-contain rounded-md"
               />
             </button>
           );

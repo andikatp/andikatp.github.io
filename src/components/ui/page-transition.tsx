@@ -24,8 +24,9 @@ export default function PageTransition() {
 
   const w = dimensions.width || 1440;
   const h = dimensions.height || 900;
-  // Prominent upward semicircle arch curve height
-  const archHeight = Math.min(Math.max(Math.round(h * 0.35), 240), 420);
+  // Soft, organic upward semicircle arch scaling responsively (gentle on mobile, prominent on desktop)
+  const rawArch = w < 640 ? Math.round(w * 0.2) : Math.round(w * 0.18);
+  const archHeight = Math.min(Math.max(rawArch, 64), 320);
 
   // SVG Path: Top edge is an upward semicircle arch, body extends down
   const archPath = `M 0 ${archHeight} Q ${w / 2} 0 ${w} ${archHeight} L ${w} ${h + archHeight * 2} L 0 ${h + archHeight * 2} Z`;
