@@ -23,7 +23,7 @@ export const ABOUT_ADDITIONALS: AdditionalItem[] = [
     title: "CONTACT",
     links: [
       {
-        label: "TRIPRASETYA_ANDIKA@YAHOO.COM",
+        label: "EMAIL",
         href: "mailto:triprasetya_andika@yahoo.com",
       },
       {

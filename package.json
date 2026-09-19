@@ -12,6 +12,8 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "contentful": "^11.12.10",
     "framer-motion": "^13.2.0",
     "lucide-react": "^1.45.0",

@@ -7,7 +7,7 @@ import { trackEvent } from "../../lib/analytics";
 
 function ContactSection() {
   return (
-    <section className="flex flex-col items-center justify-center flex-1 px-4 sm:px-8 md:px-16 w-full py-10 sm:py-12 pt-14 sm:pt-20 md:pt-24 gap-6 sm:gap-8">
+    <section className="flex flex-col items-center justify-center flex-1 px-4 sm:px-8 md:px-16 w-full py-4 sm:py-12 my-auto gap-4 sm:gap-8 min-h-0 overflow-hidden">
       <motion.p
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ function ContactSection() {
         variants={CONTAINER_VARIANTS}
         initial="hidden"
         animate="visible"
-        className="mt-4 sm:mt-8 py-4 items-center border-t border-slate-200 w-full sm:w-3/4 md:w-1/2 flex flex-col gap-y-4 sm:gap-y-6"
+        className="mt-2 sm:mt-8 py-2 sm:py-4 items-center border-t border-slate-200 w-full sm:w-3/4 md:w-1/2 flex flex-col gap-y-3 sm:gap-y-6"
       >
         {CONTACT_LINKS.map((item) => (
           <motion.div key={item.id} variants={ITEM_VARIANTS}>

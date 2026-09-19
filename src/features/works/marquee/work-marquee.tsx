@@ -121,7 +121,7 @@ export function WorkMarquee({
                 variants={MARQUEE_CARD_VARIANTS}
                 src={work.image}
                 alt={work.title}
-                className="h-[36vh] min-h-[220px] max-h-[320px] sm:h-[40vh] sm:min-h-[280px] md:h-[340px] lg:h-[400px] w-auto object-contain rounded-2xl pointer-events-none"
+                className="h-[28vh] min-h-[160px] max-h-[260px] sm:h-[36vh] sm:min-h-[240px] md:h-[340px] lg:h-[400px] w-auto object-contain rounded-2xl pointer-events-none"
               />
             </motion.div>
           );

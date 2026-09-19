@@ -49,6 +49,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     }
   }, [phase, onComplete]);
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const w =
     dimension.width ||
     (typeof window !== "undefined" ? window.innerWidth : 1440);
@@ -104,7 +111,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   className="text-center"
                 >
-                  <h1 className="text-lg sm:text-2xl md:text-3xl font-light tracking-wide text-white/90">
+                  <h1 className="text-lg sm:text-2xl md:text-2xl font-light tracking-wide text-white/90">
                     Loading<span className="animate-pulse">...</span>
                   </h1>
                 </motion.div>
