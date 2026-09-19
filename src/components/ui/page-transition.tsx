@@ -1,51 +1,90 @@
-import { motion } from "framer-motion";
-import { type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { usePageTransition } from "../../context";
 
-interface PageTransitionProps {
-  children: ReactNode;
-}
+export default function PageTransition() {
+  const { phase } = usePageTransition();
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-// Custom ease-in curve: slow at start to feel initial transition, fast towards end
-const EASE = [0.7, 0, 0.84, 0] as const;
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDimensions({
+        width:
+          window.innerWidth || document.documentElement.clientWidth || 1440,
+        height:
+          window.innerHeight || document.documentElement.clientHeight || 900,
+      });
+    };
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
 
-export default function PageTransition({ children }: PageTransitionProps) {
+  const isVisible = phase !== "idle";
+
+  const w = dimensions.width || 1440;
+  const h = dimensions.height || 900;
+  // Prominent upward semicircle arch curve height
+  const archHeight = Math.min(Math.max(Math.round(h * 0.35), 240), 420);
+
+  // SVG Path: Top edge is an upward semicircle arch, body extends down
+  const archPath = `M 0 ${archHeight} Q ${w / 2} 0 ${w} ${archHeight} L ${w} ${h + archHeight * 2} L 0 ${h + archHeight * 2} Z`;
+
+  // Custom Locomotive cubic-bezier curve easing
+  const EASE = [0.76, 0, 0.24, 1] as const;
+
   return (
-    <div className="relative w-full flex-1 flex flex-col bg-white overflow-hidden">
-      {/* Slide curtain panel (z-35, behind Navbar z-45) */}
-      <motion.div
-        initial={{ y: "100%" }}
-        animate={{ y: "100%" }}
-        exit={{
-          y: "0%",
-          transition: { duration: 0.85, ease: EASE },
-        }}
-        className="fixed inset-0 z-35 bg-white pointer-events-none"
-        style={{ willChange: "transform" }}
-      />
+    <AnimatePresence>
+      {isVisible && (
+        <div className="fixed inset-0 z-40 pointer-events-none select-none overflow-hidden">
+          {/* 1. Dark Modal Backdrop Overlay (Fades in over CURRENT page first) */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: phase === "backdrop" || phase === "rising" ? 1 : 0,
+            }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: phase === "backdrop" ? 0.35 : 0.4,
+              ease: "easeInOut",
+            }}
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm pointer-events-auto"
+          />
 
-      {/* Perspective wrapper */}
-      <motion.div
-        initial={{ scale: 0.92, y: 50, opacity: 0 }}
-        animate={{
-          scale: 1,
-          y: 0,
-          opacity: 1,
-          transition: { duration: 0.85, ease: EASE },
-        }}
-        exit={{
-          scale: 0.9,
-          y: -60,
-          opacity: 0.35,
-          transition: { duration: 0.85, ease: EASE },
-        }}
-        className="w-full flex-1 flex flex-col bg-white"
-        style={{
-          transformPerspective: 1200,
-          willChange: "transform, opacity",
-        }}
-      >
-        {children}
-      </motion.div>
-    </div>
+          {/* 2. White Semicircle Arch Panel (Rises after backdrop pause) */}
+          <motion.div
+            initial={{ y: "100vh" }}
+            animate={{
+              y:
+                phase === "backdrop"
+                  ? "100vh"
+                  : `calc(0vh - ${archHeight + 10}px)`,
+            }}
+            exit={{
+              y: `calc(0vh - ${archHeight + 10}px)`,
+              opacity: 0,
+            }}
+            transition={{
+              duration: phase === "backdrop" ? 0.35 : 0.85,
+              ease: EASE,
+            }}
+            className="absolute left-0 right-0 w-full pointer-events-auto"
+            style={{
+              height: `calc(100vh + ${archHeight * 2}px)`,
+              top: 0,
+              willChange: "transform",
+            }}
+          >
+            <svg
+              className="w-full h-full fill-white stroke-none filter drop-shadow-2xl"
+              preserveAspectRatio="none"
+              viewBox={`0 0 ${w} ${h + archHeight * 2}`}
+            >
+              <path d={archPath} />
+            </svg>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }

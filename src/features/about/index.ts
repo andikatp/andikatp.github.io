@@ -18,4 +18,3 @@ export * from "./tabs/about-summary";
 export * from "./tabs/cv-tab";
 export * from "./tabs/experience-tab";
 export * from "./tabs/skill-matrix";
-

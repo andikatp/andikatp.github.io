@@ -1,7 +1,7 @@
 import { LayoutGroup, useMotionValue, useSpring } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useModal } from "../../context/modal-context";
+import { useModal } from "../../context";
 import {
   getWorkBySlug,
   getWorkLayoutId,

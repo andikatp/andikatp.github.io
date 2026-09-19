@@ -1,40 +1,46 @@
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import meImg from "../../assets/me.webp";
+import { usePageTransition } from "../../context";
 import { Magnetic } from "../ui/magnetic";
 
 function Navbar() {
   const location = useLocation();
+  const { navigateWithTransition, isAnimating } = usePageTransition();
 
   const isHome = location.pathname === "/" || location.pathname === "/about";
 
-  const menus = isHome
-    ? [
-        { label: "About", path: "/about" },
-        { label: "Works", path: "/works" },
-        { label: "Contact", path: "/contact" },
-      ]
-    : [
-        { label: "Home", path: "/" },
-        { label: "Works", path: "/works" },
-        { label: "Contact", path: "/contact" },
-      ];
+  const menus = [
+    { label: "About", path: "/about" },
+    { label: "Works", path: "/works" },
+    { label: "Contact", path: "/contact" },
+  ];
+  const handleNavClick = (e: React.MouseEvent, path: string) => {
+    e.preventDefault();
+    if (isAnimating) return;
+    navigateWithTransition(path);
+  };
 
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="top-0 left-0 right-0 flex flex-row items-center justify-between px-16 py-6 "
+      className="relative z-50 top-0 left-0 right-0 flex flex-row items-center justify-between px-16 py-6"
     >
       {/* Left side: Logo or Back icon */}
       <div className="pointer-events-auto">
         {isHome ? (
           <Magnetic strength={0.9}>
-            <Link
-              to="/"
-              className="flex flex-row items-center space-x-3 cursor-pointer sm:space-x-4"
+            <a
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
+              className={`flex flex-row items-center space-x-3 sm:space-x-4 ${
+                isAnimating
+                  ? "cursor-default pointer-events-none"
+                  : "cursor-pointer"
+              }`}
             >
               <img
                 src={meImg}
@@ -46,17 +52,22 @@ function Navbar() {
               <h4 className="text-sm font-medium select-none text-slate-900 sm:text-base">
                 andikatp.
               </h4>
-            </Link>
+            </a>
           </Magnetic>
         ) : (
           <Magnetic strength={0.9}>
-            <Link
-              to="/"
+            <a
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
               aria-label="Back to home"
-              className="flex items-center justify-center text-white transition-all bg-black rounded-full shadow-md cursor-pointer select-none w-12 h-12 hover:scale-105 active:scale-95"
+              className={`flex items-center justify-center text-white transition-all bg-black rounded-full shadow-md select-none w-12 h-12 ${
+                isAnimating
+                  ? "cursor-default pointer-events-none"
+                  : "cursor-pointer hover:scale-105 active:scale-95"
+              }`}
             >
               <ArrowLeft className="w-5 h-5 text-white" />
-            </Link>
+            </a>
           </Magnetic>
         )}
       </div>
@@ -67,16 +78,19 @@ function Navbar() {
           const isActive = location.pathname === menu.path;
           return (
             <Magnetic key={menu.label} strength={0.35}>
-              <Link
-                to={menu.path}
-                className={`font-medium text-xs sm:text-sm md:text-base rounded-full px-3 sm:px-4 py-1.5 sm:py-2 transition-colors duration-200 ease-in-out select-none cursor-pointer block ${
-                  isActive
-                    ? "bg-black text-white"
-                    : "text-slate-900 hover:text-white hover:bg-black"
+              <a
+                href={menu.path}
+                onClick={(e) => handleNavClick(e, menu.path)}
+                className={`font-medium text-xs sm:text-sm md:text-base rounded-full px-3 sm:px-4 py-1.5 sm:py-2 transition-colors duration-200 ease-in-out select-none block ${
+                  isAnimating
+                    ? "cursor-default pointer-events-none"
+                    : "cursor-pointer"
+                } ${
+                  isActive ? "text-black" : "text-slate-600 hover:text-black"
                 }`}
               >
                 {menu.label}
-              </Link>
+              </a>
             </Magnetic>
           );
         })}

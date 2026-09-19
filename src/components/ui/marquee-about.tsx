@@ -60,4 +60,3 @@ function MarqueeAbout() {
 }
 
 export default MarqueeAbout;
-
