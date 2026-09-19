@@ -1,8 +1,25 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import { contentVariants } from "../animations/about-animations";
+import { trackEvent } from "../../../lib/analytics";
+import { fetchCvUrlFromContentful, DEFAULT_CV_URL } from "../services/cv-service";
 
 export function AboutCV({ customIndex = 1 }: { customIndex?: number }) {
+  const [cvUrl, setCvUrl] = useState<string>(DEFAULT_CV_URL);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchCvUrlFromContentful().then((url) => {
+      if (isMounted && url) {
+        setCvUrl(url);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <motion.div
@@ -51,10 +68,15 @@ export function AboutCV({ customIndex = 1 }: { customIndex?: number }) {
         </div>
 
         <a
-          href="/Andika_Tri_Prasetya_CV.pdf"
+          href={cvUrl}
           download="Andika_Tri_Prasetya_CV.pdf"
           target="_blank"
           rel="noreferrer"
+          onClick={() =>
+            trackEvent("download_cv", {
+              file_url: cvUrl,
+            })
+          }
           className="w-full bg-slate-900 text-white rounded-xl py-3 px-4 text-xs font-semibold items-center justify-center space-x-2 hover:bg-slate-700 transition-colors shadow-md select-none cursor-pointer flex text-center"
         >
           <Download className="w-4 h-4 shrink-0" />

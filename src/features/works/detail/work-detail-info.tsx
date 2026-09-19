@@ -3,6 +3,7 @@ import appstore from "../../../assets/marketplaces/appstore.webp";
 import playstore from "../../../assets/marketplaces/playstore.webp";
 import { PROJECT_INFO_VARIANTS } from "../animations/work-animations";
 import type { WorkItem } from "../data/work-data";
+import { trackEvent } from "../../../lib/analytics";
 
 interface WorkDetailInfoProps {
   work: WorkItem;
@@ -73,6 +74,13 @@ export function WorkDetailInfo({
               href={work.playStoreUrl}
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                trackEvent("click_store_link", {
+                  store: "Play Store",
+                  project: work.title,
+                  url: work.playStoreUrl,
+                })
+              }
               className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none"
             >
               <img
@@ -90,6 +98,13 @@ export function WorkDetailInfo({
               href={work.appStoreUrl}
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                trackEvent("click_store_link", {
+                  store: "App Store",
+                  project: work.title,
+                  url: work.appStoreUrl,
+                })
+              }
               className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none"
             >
               <img

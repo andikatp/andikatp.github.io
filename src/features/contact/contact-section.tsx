@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import Magnetic from "../../components/ui/magnetic";
 import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "./animations/contact-animations";
 import { CONTACT_LINKS } from "./data/contact-data";
+import { trackEvent } from "../../lib/analytics";
 
 function ContactSection() {
   return (
@@ -37,6 +38,12 @@ function ContactSection() {
                 href={item.link}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() =>
+                  trackEvent("click_contact_link", {
+                    label: item.label,
+                    link: item.link,
+                  })
+                }
                 className="flex flex-row items-center gap-2 text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900 hover:text-slate-600 transition-colors select-none"
               >
                 <span>{item.label}</span>
