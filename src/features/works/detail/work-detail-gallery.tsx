@@ -31,7 +31,7 @@ export function WorkDetailGallery({
         duration: isClosing ? 0.1 : 0.3,
         delay: isReadyAndOpen ? 0.1 : 0,
       }}
-      className="flex flex-row xl:flex-col gap-2 justify-center items-center max-w-full overflow-x-auto xl:overflow-y-auto xl:max-h-[60vh] no-scrollbar py-1 xl:py-2 shrink-0"
+      className="flex flex-row xl:flex-col gap-2 justify-center items-center max-w-full overflow-x-auto xl:overflow-y-auto xl:max-h-[60vh] no-scrollbar py-1 xl:py-2 shrink-0 order-2 xl:order-3"
     >
       {images.map((img, idx) => {
         const isSelected = idx === currentImageIndex;

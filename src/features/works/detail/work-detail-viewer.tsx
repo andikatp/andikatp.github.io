@@ -46,7 +46,7 @@ export function WorkDetailViewer({
   const isReadyAndOpen = isContentReady && !isClosing;
 
   return (
-    <div className="relative z-50 flex-1 w-full rounded-3xl flex items-center justify-center min-h-[250px] sm:min-h-[350px] md:min-h-[420px] max-h-[42vh] sm:max-h-[55vh] lg:max-h-[60vh] p-2 sm:p-4">
+    <div className="relative z-50 flex-1 w-full rounded-3xl flex items-center justify-center min-h-[250px] sm:min-h-[350px] md:min-h-[420px] max-h-[42vh] sm:max-h-[55vh] lg:max-h-[60vh] p-2 sm:p-4 order-1 xl:order-2">
       {/* Gray Container Background - Fades in after image finishes flying */}
       <motion.div
         initial={{ opacity: 0 }}

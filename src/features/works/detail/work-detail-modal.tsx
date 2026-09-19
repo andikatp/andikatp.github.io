@@ -1,5 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { BACKDROP_VARIANTS, HERO_TRANSITION } from "../animations/work-animations";
+import {
+  BACKDROP_VARIANTS,
+  HERO_TRANSITION,
+} from "../animations/work-animations";
 import { getWorkLayoutId, type WorkItem } from "../data/work-data";
 import { WorkDetailView } from "./work-detail-view";
 

@@ -50,7 +50,10 @@ export function WorkDetailSelector({
               key={item.id}
               onClick={() => {
                 if (item.id === currentWorkId) return;
-                const setIdx = getSetIndexFromLayoutId(activeLayoutId, works.length);
+                const setIdx = getSetIndexFromLayoutId(
+                  activeLayoutId,
+                  works.length,
+                );
                 const targetLayoutId = getWorkLayoutId(item, setIdx, works);
                 if (onSelectWork) {
                   onSelectWork(item, targetLayoutId);

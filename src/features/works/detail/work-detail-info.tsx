@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import appstore from "../../../assets/marketplaces/appstore.webp";
 import playstore from "../../../assets/marketplaces/playstore.webp";
+import { trackEvent } from "../../../lib/analytics";
 import { PROJECT_INFO_VARIANTS } from "../animations/work-animations";
 import type { WorkItem } from "../data/work-data";
-import { trackEvent } from "../../../lib/analytics";
 
 interface WorkDetailInfoProps {
   work: WorkItem;
@@ -34,7 +34,7 @@ export function WorkDetailInfo({
         duration: isClosing ? 0.1 : 0.3,
         delay: isReadyAndOpen ? (isInternalSwitch ? 0 : 0.05) : 0,
       }}
-      className="space-y-4 sm:space-y-6 w-full xl:w-1/3 xl:pr-6 shrink-0"
+      className="space-y-4 sm:space-y-6 w-full xl:w-1/3 xl:pr-6 shrink-0 order-3 xl:order-1"
     >
       <div>
         <p className="text-xs sm:text-sm font-medium text-slate-400 tracking-wider">
