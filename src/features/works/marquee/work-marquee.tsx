@@ -12,6 +12,7 @@ import {
 } from "../data/work-data";
 
 interface WorkMarqueeProps {
+  works?: WorkItem[];
   onHoverWork: (work: WorkItem | null) => void;
   onMouseMove: (e: React.MouseEvent) => void;
   onMouseEnter: (e: React.MouseEvent) => void;
@@ -22,6 +23,7 @@ interface WorkMarqueeProps {
 }
 
 export function WorkMarquee({
+  works,
   onHoverWork,
   onMouseMove,
   onMouseEnter,
@@ -37,6 +39,10 @@ export function WorkMarquee({
   const x = useMotionValue(0);
 
   const speed = 0.5;
+
+  const marqueeWorks = works && works.length > 0
+    ? [...works, ...works, ...works, ...works]
+    : DUPLICATED_WORKS;
 
   useEffect(() => {
     const updateWidth = () => {
@@ -79,8 +85,8 @@ export function WorkMarquee({
         style={{ x }}
         className="flex w-max shrink-0 items-center space-x-3 sm:space-x-6 py-4 sm:py-6"
       >
-        {DUPLICATED_WORKS.map((work, index) => {
-          const slug = getWorkSlug(work);
+        {marqueeWorks.map((work, index) => {
+          const slug = getWorkSlug(work, works);
           const itemLayoutId = `hero-card-${work.id}-${index}`;
           const isSelected = selectedLayoutId === itemLayoutId;
           return (

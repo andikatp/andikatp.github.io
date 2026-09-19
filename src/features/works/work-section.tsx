@@ -6,6 +6,7 @@ import {
   getWorkBySlug,
   getWorkLayoutId,
   getWorkSlug,
+  useWorks,
   WorkCursor,
   WorkDetailModal,
   WorkHeader,
@@ -15,6 +16,7 @@ import {
 } from "./";
 
 function WorkSection() {
+  const { works } = useWorks();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { setIsModalOpen: setGlobalModalOpen } = useModal();
@@ -26,10 +28,8 @@ function WorkSection() {
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredWork, setHoveredWork] = useState<WorkItem | null>(null);
 
-  // Derive work item from URL slug parameter
-  const workFromSlug = slug ? getWorkBySlug(slug) : null;
+  const workFromSlug = slug ? getWorkBySlug(slug, works) : null;
 
-  // Track explicit selection state (e.g. specific card index in marquee)
   const [selectedWorkState, setSelectedWorkState] = useState<WorkItem | null>(
     null,
   );
@@ -37,14 +37,12 @@ function WorkSection() {
     string | null
   >(null);
 
-  // Determine active selected work item
   const selectedWork = workFromSlug || selectedWorkState;
   const selectedLayoutId =
     selectedLayoutIdState ||
-    (selectedWork ? getWorkLayoutId(selectedWork, 0) : null);
+    (selectedWork ? getWorkLayoutId(selectedWork, 0, works) : null);
   const isModalOpen = Boolean(slug && workFromSlug);
 
-  // Keep global modal context synced with modal state
   useEffect(() => {
     setGlobalModalOpen(isModalOpen);
   }, [isModalOpen, setGlobalModalOpen]);
@@ -86,16 +84,16 @@ function WorkSection() {
 
   const handleSelectWork = useCallback(
     (work: WorkItem, layoutId?: string) => {
-      const workSlug = getWorkSlug(work);
+      const workSlug = getWorkSlug(work, works);
       setSelectedWorkState(work);
       if (layoutId) {
         setSelectedLayoutIdState(layoutId);
       } else {
-        setSelectedLayoutIdState(getWorkLayoutId(work, 0));
+        setSelectedLayoutIdState(getWorkLayoutId(work, 0, works));
       }
       navigate(`/works/${workSlug}`);
     },
-    [navigate],
+    [navigate, works],
   );
 
   return (
@@ -104,6 +102,7 @@ function WorkSection() {
         <WorkHeader />
         <div className="mt-auto">
           <WorkMarquee
+            works={works}
             onHoverWork={handleHoverWork}
             onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}

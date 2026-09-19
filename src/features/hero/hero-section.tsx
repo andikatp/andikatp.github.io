@@ -1,8 +1,21 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { HERO_PROJECTS } from "./data/hero-projects-data";
+import React from "react";
+import { usePageTransition } from "../../context";
+import { getWorkSlug, useWorks } from "../works";
 
 function HeroSection() {
+  const { works } = useWorks();
+  const { navigateWithTransition, isAnimating } = usePageTransition();
+
+  const handleNavClick = (e: React.MouseEvent, path: string) => {
+    e.preventDefault();
+    if (isAnimating) return;
+    navigateWithTransition(path);
+  };
+
+  const topProjects = works.slice(0, 5);
+
   return (
     <section className="flex flex-col md:flex-row items-stretch md:items-center justify-between flex-1 w-full px-4 sm:px-8 md:px-16 py-6 md:py-0 gap-8 md:gap-0">
       <div className="flex flex-col justify-center w-full md:w-2/3 gap-4 sm:gap-8 md:gap-12 lg:gap-16 my-auto">
@@ -35,25 +48,50 @@ function HeroSection() {
           CURRENT PROJECTS
         </motion.h1>
         <div className="flex flex-col">
-          {HERO_PROJECTS.map((project, index) => (
-            <motion.a
-              key={index}
-              initial={{ opacity: 0, x: 25 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.25 + index * 0.07,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="relative flex items-center justify-between w-full py-2.5 sm:py-3 lg:py-4 text-sm sm:text-base lg:text-xl font-medium border-b cursor-pointer select-none group border-slate-200 text-slate-800 hover:text-slate-950"
-            >
-              <span>{project}</span>
-              <div className="overflow-hidden flex items-center justify-center p-0.5">
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 ease-out -translate-x-full lg:w-5 lg:h-5 group-hover:translate-x-0 text-slate-900 shrink-0" />
-              </div>
-              <span className="absolute bottom-0 left-0 h-[2px] w-full bg-slate-900 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
-            </motion.a>
-          ))}
+          {topProjects.map((project, index) => {
+            const slug = getWorkSlug(project, works);
+            const path = `/works/${slug}`;
+            return (
+              <motion.a
+                key={project.id}
+                href={path}
+                onClick={(e) => handleNavClick(e, path)}
+                initial={{ opacity: 0, x: 25 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.25 + index * 0.07,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="relative flex items-center justify-between w-full py-2.5 sm:py-3 lg:py-4 text-sm sm:text-base lg:text-xl font-medium border-b cursor-pointer select-none group border-slate-200 text-slate-800 hover:text-slate-950"
+              >
+                <span>{project.title}</span>
+                <div className="overflow-hidden flex items-center justify-center p-0.5">
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 ease-out -translate-x-full lg:w-5 lg:h-5 group-hover:translate-x-0 text-slate-900 shrink-0" />
+                </div>
+                <span className="absolute bottom-0 left-0 h-[2px] w-full bg-slate-900 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+              </motion.a>
+            );
+          })}
+
+          <motion.a
+            href="/works"
+            onClick={(e) => handleNavClick(e, "/works")}
+            initial={{ opacity: 0, x: 25 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.25 + topProjects.length * 0.07,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="relative flex items-center justify-between w-full py-2.5 sm:py-3 lg:py-4 text-sm sm:text-base lg:text-xl font-medium border-b cursor-pointer select-none group border-slate-200 text-slate-800 hover:text-slate-950"
+          >
+            <span>More</span>
+            <div className="overflow-hidden flex items-center justify-center p-0.5">
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 ease-out -translate-x-full lg:w-5 lg:h-5 group-hover:translate-x-0 text-slate-900 shrink-0" />
+            </div>
+            <span className="absolute bottom-0 left-0 h-[2px] w-full bg-slate-900 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+          </motion.a>
         </div>
       </div>
     </section>

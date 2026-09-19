@@ -2,6 +2,8 @@ export { default as WorkSection } from "./work-section";
 
 export * from "./data/work-data";
 export * from "./animations/work-animations";
+export * from "./services/work-service";
+export * from "./hooks/use-works";
 
 export * from "./detail/work-detail-gallery";
 export * from "./detail/work-detail-info";

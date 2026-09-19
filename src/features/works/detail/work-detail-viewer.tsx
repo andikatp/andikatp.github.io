@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   HERO_TRANSITION,
   INTERNAL_SWITCH_TRANSITION,
-  MARQUEE_CARD_VARIANTS,
 } from "../animations/work-animations";
 import type { WorkItem } from "../data/work-data";
 
@@ -32,11 +31,17 @@ export function WorkDetailViewer({
   onPrevImage,
   onNextImage,
 }: WorkDetailViewerProps) {
+  // Only apply layoutId flight during initial modal opening (!isContentReady) or closing (isClosing)
+  const shouldApplyLayoutId = !isContentReady || isClosing;
+  const currentLayoutId = shouldApplyLayoutId ? activeLayoutId : undefined;
+
   const imageTransition: Transition = isClosing
     ? HERO_TRANSITION
     : isInternalSwitch
       ? INTERNAL_SWITCH_TRANSITION
-      : HERO_TRANSITION;
+      : !isContentReady
+        ? HERO_TRANSITION
+        : { duration: 0.15, ease: "easeOut" };
 
   const isReadyAndOpen = isContentReady && !isClosing;
 
@@ -53,16 +58,14 @@ export function WorkDetailViewer({
 
       <motion.img
         key={`${work.id}-${currentImageIndex}`}
-        layoutId={activeLayoutId}
-        variants={MARQUEE_CARD_VARIANTS}
-        initial="rest"
-        animate="selected"
-        exit="rest"
+        layoutId={currentLayoutId}
+        initial={{ opacity: isContentReady ? 0.8 : 1 }}
+        animate={{ opacity: 1 }}
         onLayoutAnimationComplete={onLayoutAnimationComplete}
         transition={imageTransition}
         src={images[currentImageIndex]}
         alt={`${work.title} photo ${currentImageIndex + 1}`}
-        className="h-full max-h-[38vh] sm:max-h-[52vh] lg:max-h-[56vh] w-auto object-contain rounded-2xl z-10 select-none relative"
+        className="h-full max-h-[38vh] sm:max-h-[52vh] lg:max-h-[56vh] w-auto max-w-full object-contain rounded-2xl z-10 select-none relative"
       />
 
       {/* Left Arrow Button */}

@@ -12,6 +12,7 @@ interface WorkDetailSelectorProps {
   activeLayoutId: string;
   isContentReady: boolean;
   isClosing: boolean;
+  works?: WorkItem[];
   onSelectWork?: (work: WorkItem, layoutId?: string) => void;
   onSelectInternal: (work: WorkItem, targetLayoutId: string) => void;
 }
@@ -21,10 +22,11 @@ export function WorkDetailSelector({
   activeLayoutId,
   isContentReady,
   isClosing,
+  works = WORKS,
   onSelectWork,
   onSelectInternal,
 }: WorkDetailSelectorProps) {
-  const projectsList = WORKS.slice(0, 8);
+  const projectsList = works.slice(0, 8);
   const isReadyAndOpen = isContentReady && !isClosing;
 
   return (
@@ -48,8 +50,8 @@ export function WorkDetailSelector({
               key={item.id}
               onClick={() => {
                 if (item.id === currentWorkId) return;
-                const setIdx = getSetIndexFromLayoutId(activeLayoutId);
-                const targetLayoutId = getWorkLayoutId(item, setIdx);
+                const setIdx = getSetIndexFromLayoutId(activeLayoutId, works.length);
+                const targetLayoutId = getWorkLayoutId(item, setIdx, works);
                 if (onSelectWork) {
                   onSelectWork(item, targetLayoutId);
                 } else {

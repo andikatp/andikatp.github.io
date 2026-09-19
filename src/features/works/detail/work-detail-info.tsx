@@ -19,6 +19,7 @@ export function WorkDetailInfo({
 }: WorkDetailInfoProps) {
   const workNumber = String(work.id).padStart(2, "0");
   const isReadyAndOpen = isContentReady && !isClosing;
+  const hasStoreLinks = Boolean(work.playStoreUrl || work.appStoreUrl);
 
   return (
     <motion.div
@@ -65,28 +66,44 @@ export function WorkDetailInfo({
         </div>
       </div>
 
-      <div className="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 pt-3 sm:pt-6">
-        <button className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none">
-          <img
-            src={playstore}
-            alt="Play Store"
-            height={20}
-            width={20}
-            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
-          />
-          <span>Play Store</span>
-        </button>
-        <button className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none">
-          <img
-            src={appstore}
-            alt="App Store"
-            height={20}
-            width={20}
-            className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
-          />
-          <span>App Store</span>
-        </button>
-      </div>
+      {hasStoreLinks && (
+        <div className="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 pt-3 sm:pt-6">
+          {work.playStoreUrl && (
+            <a
+              href={work.playStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none"
+            >
+              <img
+                src={playstore}
+                alt="Play Store"
+                height={20}
+                width={20}
+                className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+              />
+              <span>Play Store</span>
+            </a>
+          )}
+          {work.appStoreUrl && (
+            <a
+              href={work.appStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-slate-50 transition-colors duration-200 flex flex-row justify-center items-center gap-2 cursor-pointer border border-slate-200 text-xs sm:text-sm font-medium text-slate-800 flex-1 sm:flex-none"
+            >
+              <img
+                src={appstore}
+                alt="App Store"
+                height={20}
+                width={20}
+                className="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+              />
+              <span>App Store</span>
+            </a>
+          )}
+        </div>
+      )}
     </motion.div>
   );
 }

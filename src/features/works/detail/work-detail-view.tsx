@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Magnetic from "../../../components/ui/magnetic";
 import { BACK_BUTTON_VARIANTS } from "../animations/work-animations";
-import { getWorkBySlug, getWorkLayoutId, getWorkSlug, type WorkItem } from "../data/work-data";
+import {
+  getWorkBySlug,
+  getWorkLayoutId,
+  getWorkSlug,
+  type WorkItem,
+} from "../data/work-data";
+import { useWorks } from "../hooks/use-works";
 import { WorkDetailGallery } from "./work-detail-gallery";
 import { WorkDetailInfo } from "./work-detail-info";
 import { WorkDetailSelector } from "./work-detail-selector";
@@ -23,6 +29,7 @@ export function WorkDetailView({
   onClose,
   onSelectWork,
 }: WorkDetailViewProps = {}) {
+  const { works } = useWorks();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -30,7 +37,7 @@ export function WorkDetailView({
   const [isClosing, setIsClosing] = useState(false);
   const [isInternalSwitch, setIsInternalSwitch] = useState(false);
 
-  const work = propWork || (slug ? getWorkBySlug(slug) : undefined);
+  const work = propWork || (slug ? getWorkBySlug(slug, works) : undefined);
 
   const [prevWorkId, setPrevWorkId] = useState(work?.id);
   if (work?.id !== prevWorkId) {
@@ -60,14 +67,10 @@ export function WorkDetailView({
   }, [work?.id, isClosing, isInternalSwitch]);
 
   const activeLayoutId =
-    layoutId || (work ? getWorkLayoutId(work, 0) : undefined);
+    layoutId || (work ? getWorkLayoutId(work, 0, works) : undefined);
 
-  const images =
-    work?.images && work.images.length > 0
-      ? work.images
-      : work
-        ? [work.image]
-        : [];
+  const rawImages = work ? [work.image, ...(work.images || [])] : [];
+  const images = Array.from(new Set(rawImages.filter(Boolean)));
 
   const handleClose = () => {
     setIsClosing(true);
@@ -144,7 +147,6 @@ export function WorkDetailView({
           onPrevImage={handlePrevImage}
           onNextImage={handleNextImage}
         />
-
         <WorkDetailGallery
           images={images}
           currentImageIndex={currentImageIndex}
@@ -159,10 +161,11 @@ export function WorkDetailView({
         activeLayoutId={activeLayoutId || ""}
         isContentReady={isContentReady}
         isClosing={isClosing}
+        works={works}
         onSelectWork={onSelectWork}
         onSelectInternal={(item) => {
           setCurrentImageIndex(0);
-          navigate(`/works/${getWorkSlug(item)}`);
+          navigate(`/works/${getWorkSlug(item, works)}`);
         }}
       />
     </div>

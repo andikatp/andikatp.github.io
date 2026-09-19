@@ -40,9 +40,7 @@ export function WorkDetailGallery({
             key={idx}
             onClick={() => onSelectImage(idx)}
             className={`relative w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden transition-all duration-200 cursor-pointer shrink-0 bg-slate-100 ${
-              isSelected
-                ? "opacity-100 grayscale-0 scale-105 ring-2 ring-slate-900"
-                : "opacity-40 grayscale hover:opacity-100 hover:grayscale-0"
+              isSelected ? "opacity-100" : "opacity-40 hover:opacity-100"
             }`}
           >
             <img
