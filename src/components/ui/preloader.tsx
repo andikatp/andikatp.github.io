@@ -73,7 +73,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           : { y: 0 }
       }
       transition={{ duration: 1.15, ease: EASE }}
-      className="fixed inset-0 z-9999 pointer-events-none select-none transform-gpu"
+      className="fixed inset-0 z-99999 pointer-events-none select-none transform-gpu"
     >
       {/* SVG Background Path Curtain Overlay */}
       <svg className="absolute top-0 left-0 w-full h-[calc(100%+550px)] fill-black stroke-none pointer-events-auto">

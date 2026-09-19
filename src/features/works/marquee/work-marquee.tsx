@@ -77,7 +77,7 @@ export function WorkMarquee({
       <motion.div
         ref={containerRef}
         style={{ x }}
-        className="flex w-max shrink-0 items-center space-x-6 py-2 transform-gpu will-change-transform"
+        className="flex w-max shrink-0 items-center space-x-6 py-6"
       >
         {DUPLICATED_WORKS.map((work, index) => {
           const slug = getWorkSlug(work);
@@ -110,17 +110,12 @@ export function WorkMarquee({
               style={{ zIndex: isSelected ? 9999 : 1 }}
             >
               <motion.img
-                layoutId={isSelected ? itemLayoutId : undefined}
-                transition={{
-                  layout: HERO_TRANSITION,
-                  scale: { duration: 0.2, ease: "easeOut" },
-                  opacity: { duration: 0.2, ease: "easeOut" },
-                  filter: { duration: 0.2, ease: "easeOut" },
-                }}
+                layoutId={itemLayoutId}
+                transition={HERO_TRANSITION}
                 variants={MARQUEE_CARD_VARIANTS}
                 src={work.image}
                 alt={work.title}
-                className="h-[48vh] min-h-[300px] max-h-[440px] sm:h-72 md:h-[340px] lg:h-[400px] w-auto object-contain rounded-xl pointer-events-none transform-gpu"
+                className="h-[48vh] min-h-[300px] max-h-[440px] sm:h-72 md:h-[340px] lg:h-[400px] w-auto object-contain rounded-2xl pointer-events-none"
               />
             </motion.div>
           );
@@ -129,4 +124,3 @@ export function WorkMarquee({
     </div>
   );
 }
-

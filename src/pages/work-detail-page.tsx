@@ -61,11 +61,10 @@ export default function WorkDetailPage({
       if (!isClosing) {
         setIsContentReady(true);
       }
-    }, 800);
+    }, 350);
     return () => clearTimeout(timer);
   }, [work?.id, isClosing, isInternalSwitch]);
 
-  // Active layoutId points to the currently selected work item in the marquee
   const activeLayoutId =
     layoutId || (work ? getWorkLayoutId(work, 0) : undefined);
 

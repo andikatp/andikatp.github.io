@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   HERO_TRANSITION,
   INTERNAL_SWITCH_TRANSITION,
+  MARQUEE_CARD_VARIANTS,
 } from "../animations/work-animations";
 import type { WorkItem } from "../data/work-data";
 
@@ -53,10 +54,12 @@ export function WorkDetailViewer({
       <motion.img
         key={`${work.id}-${currentImageIndex}`}
         layoutId={activeLayoutId}
+        variants={MARQUEE_CARD_VARIANTS}
+        initial="rest"
+        animate="selected"
+        exit="rest"
         onLayoutAnimationComplete={onLayoutAnimationComplete}
         transition={imageTransition}
-        initial={isInternalSwitch ? { opacity: 0, scale: 0.95 } : false}
-        animate={{ opacity: 1, scale: 1 }}
         src={images[currentImageIndex]}
         alt={`${work.title} photo ${currentImageIndex + 1}`}
         className="h-full max-h-[56vh] w-auto object-contain rounded-2xl z-10 select-none relative"

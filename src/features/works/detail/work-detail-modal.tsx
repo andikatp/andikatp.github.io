@@ -9,6 +9,7 @@ interface WorkDetailModalProps {
   selectedLayoutId: string | null;
   onClose: () => void;
   onSelectWork: (nextWork: WorkItem, nextLayoutId?: string) => void;
+  onExitComplete?: () => void;
 }
 
 export function WorkDetailModal({
@@ -17,16 +18,17 @@ export function WorkDetailModal({
   selectedLayoutId,
   onClose,
   onSelectWork,
+  onExitComplete,
 }: WorkDetailModalProps) {
   return (
-    <AnimatePresence
-      onExitComplete={() => {
-        onClose();
-      }}
-    >
+    <AnimatePresence onExitComplete={onExitComplete}>
       {isOpen && selectedWork && (
         <motion.div
           key="work-detail-modal"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: HERO_TRANSITION.ease }}
           className="fixed inset-0 z-100 overflow-y-auto flex flex-col justify-between"
         >
           {/* Backdrop layer */}

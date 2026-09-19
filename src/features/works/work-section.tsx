@@ -1,7 +1,11 @@
 import { LayoutGroup, useMotionValue, useSpring } from "framer-motion";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useModal } from "../../context/modal-context";
 import {
+  getWorkBySlug,
+  getWorkLayoutId,
+  getWorkSlug,
   WorkCursor,
   WorkDetailModal,
   WorkHeader,
@@ -11,6 +15,8 @@ import {
 } from "./";
 
 function WorkSection() {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const { setIsModalOpen: setGlobalModalOpen } = useModal();
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
@@ -19,20 +25,51 @@ function WorkSection() {
 
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredWork, setHoveredWork] = useState<WorkItem | null>(null);
-  const [selectedWork, setSelectedWork] = useState<WorkItem | null>(null);
-  const [selectedLayoutId, setSelectedLayoutId] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    rawX.set(e.clientX - 64);
-    rawY.set(e.clientY - 24);
-  }, [rawX, rawY]);
+  // Derive work item from URL slug parameter
+  const workFromSlug = slug ? getWorkBySlug(slug) : null;
 
-  const handleMouseEnter = useCallback((e: React.MouseEvent) => {
-    rawX.set(e.clientX - 64);
-    rawY.set(e.clientY - 24);
-    setIsHovered(true);
-  }, [rawX, rawY]);
+  // Track explicit selection state (e.g. specific card index in marquee)
+  const [selectedWorkState, setSelectedWorkState] = useState<WorkItem | null>(
+    null,
+  );
+  const [selectedLayoutIdState, setSelectedLayoutIdState] = useState<
+    string | null
+  >(null);
+
+  // Determine active selected work item
+  const selectedWork = workFromSlug || selectedWorkState;
+  const selectedLayoutId =
+    selectedLayoutIdState ||
+    (selectedWork ? getWorkLayoutId(selectedWork, 0) : null);
+  const isModalOpen = Boolean(slug && workFromSlug);
+
+  // Keep global modal context synced with modal state
+  useEffect(() => {
+    setGlobalModalOpen(isModalOpen);
+  }, [isModalOpen, setGlobalModalOpen]);
+
+  const handleExitComplete = useCallback(() => {
+    setSelectedWorkState(null);
+    setSelectedLayoutIdState(null);
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      rawX.set(e.clientX - 64);
+      rawY.set(e.clientY - 24);
+    },
+    [rawX, rawY],
+  );
+
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent) => {
+      rawX.set(e.clientX - 64);
+      rawY.set(e.clientY - 24);
+      setIsHovered(true);
+    },
+    [rawX, rawY],
+  );
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
@@ -44,11 +81,22 @@ function WorkSection() {
   }, []);
 
   const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-    setGlobalModalOpen(false);
-    setSelectedWork(null);
-    setSelectedLayoutId(null);
-  }, [setGlobalModalOpen]);
+    navigate("/works");
+  }, [navigate]);
+
+  const handleSelectWork = useCallback(
+    (work: WorkItem, layoutId?: string) => {
+      const workSlug = getWorkSlug(work);
+      setSelectedWorkState(work);
+      if (layoutId) {
+        setSelectedLayoutIdState(layoutId);
+      } else {
+        setSelectedLayoutIdState(getWorkLayoutId(work, 0));
+      }
+      navigate(`/works/${workSlug}`);
+    },
+    [navigate],
+  );
 
   return (
     <LayoutGroup id="work-gallery">
@@ -62,12 +110,7 @@ function WorkSection() {
             onMouseLeave={handleMouseLeave}
             isPausedProp={isModalOpen || Boolean(selectedWork)}
             selectedLayoutId={selectedLayoutId}
-            onSelectWork={(work, layoutId) => {
-              setSelectedWork(work);
-              setSelectedLayoutId(layoutId);
-              setIsModalOpen(true);
-              setGlobalModalOpen(true);
-            }}
+            onSelectWork={handleSelectWork}
           />
         </div>
         <WorkInfoPanel hoveredWork={hoveredWork} />
@@ -82,12 +125,8 @@ function WorkSection() {
           selectedWork={selectedWork}
           selectedLayoutId={selectedLayoutId}
           onClose={handleCloseModal}
-          onSelectWork={(nextWork, nextLayoutId) => {
-            setSelectedWork(nextWork);
-            if (nextLayoutId) {
-              setSelectedLayoutId(nextLayoutId);
-            }
-          }}
+          onSelectWork={handleSelectWork}
+          onExitComplete={handleExitComplete}
         />
       </section>
     </LayoutGroup>
@@ -95,4 +134,3 @@ function WorkSection() {
 }
 
 export default WorkSection;
-

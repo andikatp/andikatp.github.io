@@ -4,8 +4,8 @@ import type { Transition, Variants } from "framer-motion";
  * Main hero layout flight transition curve (slower quintic ease)
  */
 export const HERO_TRANSITION: Transition = {
-  duration: 0.75,
-  ease: [0.64, 0, 0.78, 0],
+  duration: 0.95,
+  ease: [0.22, 1, 0.36, 1],
 };
 
 /**
