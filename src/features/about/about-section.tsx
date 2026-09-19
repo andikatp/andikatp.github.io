@@ -2,20 +2,20 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  AboutAdditionals,
-  AboutBackdrop,
-  AboutCV,
-  AboutCurve,
-  AboutExperience,
-  AboutHeader,
-  AboutIntro,
-  AboutStory,
-  AboutSummary,
-  SkillMatrix,
   contentVariants,
   menuVariants,
   tabVariants,
-} from "./";
+} from "./animations/about-animations";
+import { AboutBackdrop } from "./modal/about-backdrop";
+import { AboutCurve } from "./modal/about-curve";
+import { AboutHeader } from "./modal/about-header";
+import AboutAdditionals from "./tabs/about-additionals";
+import { AboutCV } from "./tabs/about-cv-tab";
+import { AboutExperience } from "./tabs/about-experience-tab";
+import { AboutIntro } from "./tabs/about-intro";
+import { AboutSkillMatrix } from "./tabs/about-skill-matrix";
+import { AboutStory } from "./tabs/about-story";
+import { AboutSummary } from "./tabs/about-summary";
 
 interface AboutProps {
   isOpen: boolean;
@@ -56,10 +56,8 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
     <AnimatePresence mode="wait">
       {isOpen && (
         <>
-          {/* Dark Backdrop with Custom Floating Close Pointer */}
           <AboutBackdrop onClose={onClose} />
 
-          {/* Right Curved Slide-Over Modal */}
           <motion.div
             variants={menuVariants}
             initial="initial"
@@ -67,13 +65,9 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
             exit="exit"
             className="fixed top-0 right-0 flex flex-col w-full h-full bg-white shadow-2xl sm:w-[85%] md:w-[65%] lg:w-1/2 xl:w-2/5 text-slate-900 z-70"
           >
-            {/* SVG Elastic Curve Edge on Left Border */}
             <AboutCurve windowHeight={windowHeight} />
-
-            {/* Header */}
             <AboutHeader onClose={onClose} customIndex={0} />
 
-            {/* Tab Navigation */}
             <div className="flex items-center px-4 sm:px-6 md:px-8 pt-3 sm:pt-4 pb-2 space-x-2 border-b border-slate-100 shrink-0 overflow-x-auto no-scrollbar">
               {tabs.map((tab) => {
                 const isActive = activeTab === tab.id;
@@ -93,7 +87,6 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
               })}
             </div>
 
-            {/* Scrollable Content Body */}
             <div className="flex-1 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8 overflow-x-hidden overflow-y-auto no-scrollbar">
               <AnimatePresence mode="wait">
                 {activeTab === "about" && (
@@ -115,7 +108,7 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
                       animate="enter"
                       exit="exit"
                     >
-                      <SkillMatrix />
+                      <AboutSkillMatrix />
                     </motion.div>
 
                     <AboutSummary customIndex={4} />
@@ -148,7 +141,6 @@ function AboutSection({ isOpen, onClose }: AboutProps) {
               </AnimatePresence>
             </div>
 
-            {/* Pinned Bottom Footer (Always Visible) */}
             <motion.div
               custom={5}
               variants={contentVariants}

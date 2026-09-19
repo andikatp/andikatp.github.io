@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useState } from "react";
-import { backdropVariants } from "./about-variants";
+import { backdropVariants } from "../animations/about-animations";
 
 interface AboutBackdropProps {
   onClose: () => void;
@@ -30,7 +30,6 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
 
   return (
     <>
-      {/* Dark Backdrop Overlay */}
       <motion.div
         variants={backdropVariants}
         initial="initial"
@@ -52,7 +51,6 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
         onMouseLeave={() => setShowCloseCircle(false)}
       />
 
-      {/* Floating Pointer "Close" Circle */}
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{
@@ -72,4 +70,3 @@ export function AboutBackdrop({ onClose }: AboutBackdropProps) {
     </>
   );
 }
-

@@ -1,19 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { HERO_PROJECTS } from "./data/hero-projects-data";
 
 function HeroSection() {
-  const projects = [
-    "Hrm Ess",
-    "DG Sales App",
-    "My Sinar Jaya",
-    "Mootasi",
-    "Devkit",
-    "More",
-  ];
-
   return (
     <section className="flex flex-col md:flex-row items-stretch md:items-center justify-between flex-1 w-full px-4 sm:px-8 md:px-16 py-6 md:py-0 gap-8 md:gap-0">
-      {/* left side */}
       <div className="flex flex-col justify-center w-full md:w-2/3 gap-4 sm:gap-8 md:gap-12 lg:gap-16 my-auto">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
@@ -34,7 +25,6 @@ function HeroSection() {
         </motion.p>
       </div>
 
-      {/* right side */}
       <div className="flex flex-col w-full md:w-1/3 mt-4 md:mt-0 md:pl-8 lg:pl-16 space-y-3 sm:space-y-4">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -45,7 +35,7 @@ function HeroSection() {
           CURRENT PROJECTS
         </motion.h1>
         <div className="flex flex-col">
-          {projects.map((project, index) => (
+          {HERO_PROJECTS.map((project, index) => (
             <motion.a
               key={index}
               initial={{ opacity: 0, x: 25 }}

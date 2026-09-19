@@ -1,50 +1,8 @@
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Magnetic from "../../components/ui/magnetic";
-
-interface ILink {
-  id: number;
-  label: string;
-  link: string;
-}
-
-const links: ILink[] = [
-  {
-    id: 1,
-    label: "Email",
-    link: "mailto:triprasetya_andika@yahoo.com",
-  },
-  {
-    id: 2,
-    label: "Linkedin",
-    link: "https://www.linkedin.com/in/andikatp/",
-  },
-  {
-    id: 3,
-    label: "Github",
-    link: "https://github.com/andikatp",
-  },
-];
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+import { CONTAINER_VARIANTS, ITEM_VARIANTS } from "./animations/contact-animations";
+import { CONTACT_LINKS } from "./data/contact-data";
 
 function ContactSection() {
   return (
@@ -67,13 +25,13 @@ function ContactSection() {
       </motion.h1>
 
       <motion.div
-        variants={containerVariants}
+        variants={CONTAINER_VARIANTS}
         initial="hidden"
         animate="visible"
         className="mt-4 sm:mt-8 py-4 items-center border-t border-slate-200 w-full sm:w-3/4 md:w-1/2 flex flex-col gap-y-4 sm:gap-y-6"
       >
-        {links.map((item) => (
-          <motion.div key={item.id} variants={itemVariants}>
+        {CONTACT_LINKS.map((item) => (
+          <motion.div key={item.id} variants={ITEM_VARIANTS}>
             <Magnetic strength={0.9}>
               <a
                 href={item.link}

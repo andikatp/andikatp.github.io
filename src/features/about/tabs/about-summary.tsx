@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { contentVariants } from "../modal/about-variants";
+import { contentVariants } from "../animations/about-animations";
 
 export function AboutSummary({ customIndex = 4 }: { customIndex?: number }) {
   return (

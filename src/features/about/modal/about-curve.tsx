@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { getCurveVariants } from "./about-variants";
+import { getCurveVariants } from "../animations/about-animations";
 
 interface AboutCurveProps {
   windowHeight: number;

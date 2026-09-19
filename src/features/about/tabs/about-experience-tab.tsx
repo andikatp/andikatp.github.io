@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Calendar, MapPin } from "lucide-react";
+import { contentVariants } from "../animations/about-animations";
 import { EXPERIENCE_DATA } from "../data/experience-data";
-import { contentVariants } from "../modal/about-variants";
 
 export function AboutExperience() {
   return (
@@ -33,7 +33,6 @@ export function AboutExperience() {
             exit="exit"
             className="relative pl-8 space-y-2.5"
           >
-            {/* Timeline Dot */}
             <div className="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-slate-900 ring-4 ring-white" />
 
             <div>
@@ -70,3 +69,5 @@ export function AboutExperience() {
     </div>
   );
 }
+
+export default AboutExperience;

@@ -2,32 +2,27 @@ import { motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Magnetic from "../components/ui/magnetic";
-import {
-  BACK_BUTTON_VARIANTS,
-  getWorkBySlug,
-  getWorkLayoutId,
-  getWorkSlug,
-  WorkDetailGallery,
-  WorkDetailInfo,
-  WorkDetailSelector,
-  WorkDetailViewer,
-  type WorkItem,
-} from "../features/works";
+import Magnetic from "../../../components/ui/magnetic";
+import { BACK_BUTTON_VARIANTS } from "../animations/work-animations";
+import { getWorkBySlug, getWorkLayoutId, getWorkSlug, type WorkItem } from "../data/work-data";
+import { WorkDetailGallery } from "./work-detail-gallery";
+import { WorkDetailInfo } from "./work-detail-info";
+import { WorkDetailSelector } from "./work-detail-selector";
+import { WorkDetailViewer } from "./work-detail-viewer";
 
-interface WorkDetailPageProps {
+interface WorkDetailViewProps {
   work?: WorkItem;
   layoutId?: string;
   onClose?: () => void;
   onSelectWork?: (work: WorkItem, layoutId?: string) => void;
 }
 
-export default function WorkDetailPage({
+export function WorkDetailView({
   work: propWork,
   layoutId,
   onClose,
   onSelectWork,
-}: WorkDetailPageProps = {}) {
+}: WorkDetailViewProps = {}) {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -54,7 +49,6 @@ export default function WorkDetailPage({
     return () => clearTimeout(timer);
   }, [isInternalSwitch]);
 
-  // Fallback safety timer in case layout animation complete callback doesn't fire
   useEffect(() => {
     if (isClosing || isInternalSwitch) return;
     const timer = setTimeout(() => {
@@ -112,7 +106,6 @@ export default function WorkDetailPage({
 
   return (
     <div className="w-full px-4 sm:px-8 md:px-16 py-4 sm:py-6 min-h-screen flex flex-col justify-between relative z-10">
-      {/* Back Button */}
       <motion.button
         variants={BACK_BUTTON_VARIANTS}
         initial="initial"
@@ -127,7 +120,6 @@ export default function WorkDetailPage({
         <X className="w-4 h-4 sm:w-5 sm:h-5" />
       </motion.button>
 
-      {/* Main Content Row */}
       <div className="flex flex-col xl:flex-row items-stretch xl:items-center flex-1 gap-6 xl:gap-8 w-full max-w-[1700px] mx-auto my-auto py-2 sm:py-4">
         <WorkDetailInfo
           work={work}
@@ -162,7 +154,6 @@ export default function WorkDetailPage({
         />
       </div>
 
-      {/* Quick Project Switcher */}
       <WorkDetailSelector
         currentWorkId={work.id}
         activeLayoutId={activeLayoutId || ""}
@@ -178,4 +169,4 @@ export default function WorkDetailPage({
   );
 }
 
-
+export default WorkDetailView;

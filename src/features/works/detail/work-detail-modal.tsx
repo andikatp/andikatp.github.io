@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
-import WorkDetailPage from "../../../pages/work-detail-page";
 import { BACKDROP_VARIANTS, HERO_TRANSITION } from "../animations/work-animations";
 import { getWorkLayoutId, type WorkItem } from "../data/work-data";
+import { WorkDetailView } from "./work-detail-view";
 
 interface WorkDetailModalProps {
   isOpen: boolean;
@@ -31,7 +31,6 @@ export function WorkDetailModal({
           transition={{ duration: 0.3, ease: HERO_TRANSITION.ease }}
           className="fixed inset-0 z-100 overflow-y-auto flex flex-col justify-between"
         >
-          {/* Backdrop layer */}
           <motion.div
             key="modal-backdrop"
             variants={BACKDROP_VARIANTS}
@@ -44,7 +43,7 @@ export function WorkDetailModal({
           />
 
           <div className="relative z-10 min-h-screen flex flex-col justify-between">
-            <WorkDetailPage
+            <WorkDetailView
               work={selectedWork}
               layoutId={selectedLayoutId || getWorkLayoutId(selectedWork, 0)}
               onClose={onClose}

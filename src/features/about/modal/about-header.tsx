@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import meImg from "../../../assets/me.webp";
 import { Magnetic } from "../../../components/ui/magnetic";
-import { contentVariants } from "./about-variants";
+import { contentVariants } from "../animations/about-animations";
 
 interface AboutHeaderProps {
   onClose: () => void;

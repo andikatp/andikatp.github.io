@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
-import { contentVariants } from "../modal/about-variants";
+import { contentVariants } from "../animations/about-animations";
 
 export function AboutCV({ customIndex = 1 }: { customIndex?: number }) {
   return (
@@ -64,3 +64,5 @@ export function AboutCV({ customIndex = 1 }: { customIndex?: number }) {
     </div>
   );
 }
+
+export default AboutCV;

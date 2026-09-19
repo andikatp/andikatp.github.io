@@ -1,16 +1,16 @@
 import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
 import React, { useEffect, useRef } from "react";
 
-const items = [
+const ITEMS = [
   "Based in Bandung, Indonesia",
   "Open for fulltime job anywhere",
   "3+ years of experiences",
   "Fullstack Developer",
 ];
 
-const trackItems = [...items, ...items, ...items, ...items];
+const TRACK_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS, ...ITEMS];
 
-function MarqueeAbout() {
+export function AboutMarquee() {
   const baseX = useMotionValue(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const singleWidthRef = useRef<number>(0);
@@ -48,7 +48,7 @@ function MarqueeAbout() {
         style={{ x: baseX }}
         className="flex w-max shrink-0 items-center space-x-6 pr-6 transform-gpu will-change-transform"
       >
-        {trackItems.map((item, index) => (
+        {TRACK_ITEMS.map((item, index) => (
           <React.Fragment key={`about-item-${index}`}>
             <span className="text-sm whitespace-nowrap">{item}</span>
             <span className="text-xl opacity-70">•</span>
@@ -59,4 +59,4 @@ function MarqueeAbout() {
   );
 }
 
-export default MarqueeAbout;
+export default AboutMarquee;
